@@ -4,10 +4,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +33,9 @@ public class Home extends HttpServlet {
             filePart.write(filePath+File.separator+fileName);
             filenames += " " + fileName;
         }
+
+
+
 
         if(flag==1){
             out.print("success");
