@@ -2,12 +2,14 @@ package SmellTest;
 
 import java.io.*;
 import java.util.*;
-public class RepeatedIfs {
+public class DuplicateLines {
 
-    String fileName = "";
+    String fileName;
+    File inputFile;
 
-    public RepeatedIfs(String fileName) throws FileNotFoundException {
+    public DuplicateLines(String fileName, File inputFile) throws FileNotFoundException {
         this.fileName = fileName;
+        this.inputFile = inputFile;
     }
 
     /*File file = new File(fileName);
@@ -16,6 +18,7 @@ public class RepeatedIfs {
 
         while(in.hasNextLine()){
             String tempKey = in.nextLine();
+            tempKey = tempKey.trim();
 
             if (tempKey.indexOf(';') >= 0) {
                 if (map.containsKey(tempKey)) {
