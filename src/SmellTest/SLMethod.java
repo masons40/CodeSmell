@@ -1,13 +1,14 @@
-import java.util.ArrayList;
 package SmellTest;
 
-public class Method {
+import java.util.ArrayList;
+
+public class SLMethod {
     private String scope;
     private String name;
     private String returnType;
     private ArrayList parameters;
 
-    public Method(String name) {
+    public SLMethod(String name) {
         this.name = name;
         //this.returnType = returnType;
         //this.parameters = parameters;
