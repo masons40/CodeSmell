@@ -1,6 +1,6 @@
 /*Switch Block object for each conditional variable */
 
-package SmellTest;
+package files;
 
 public class SwitchBlock {
 	private final String var_name;

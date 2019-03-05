@@ -1,4 +1,4 @@
-package SmellTest;
+package files;
 
 import java.util.ArrayList;
 

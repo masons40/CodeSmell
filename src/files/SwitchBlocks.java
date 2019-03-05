@@ -1,10 +1,8 @@
 /* Collection of SwitchBlocks to be assigned to each java source file */
-package SmellTest;
+package files;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Collections;
-import java.util.Iterator;
 
 public class SwitchBlocks {
 	static public HashMap<String, SwitchBlock> switch_blocks = new HashMap();

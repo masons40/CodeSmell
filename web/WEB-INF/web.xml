@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>Home</servlet-name>
-        <servlet-class>SmellTest.Home</servlet-class>
+        <servlet-class>Home</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>

@@ -1,11 +1,8 @@
-package SmellTest;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,16 +31,11 @@ public class Home extends HttpServlet {
             filenames += " " + fileName;
         }
 
-
-
-
         if(flag==1){
             out.print("success");
         }else{
             out.print(filenames);
         }
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
