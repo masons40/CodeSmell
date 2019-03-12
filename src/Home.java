@@ -25,20 +25,16 @@ public class Home extends HttpServlet {
 
         List<Part> fileParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList()); // Retrieves <input type="file" name="file" multiple="true">
         String filenames = "";
-        String line = "";
-        BufferedReader bufferedReader = null;
 
         // Fore each file -> print file names to webpage
         for (Part filePart : fileParts) {
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
             InputStream fileContent = filePart.getInputStream();
-            bufferedReader = new BufferedReader(new InputStreamReader(fileContent));
+            createSLFile(fileContent, response);
 
 //            filePart.write(filePath+File.separator+fileName);
 //            filenames += " " + fileName;
-            while ((line = bufferedReader.readLine()) != null) {
-                out.print(line + "\n");
-            }
+
         }
 
         if(flag==1){
@@ -52,9 +48,16 @@ public class Home extends HttpServlet {
 
     }
 
-//    private void lineParser(BufferedReader br) {
-//
-//    }
+    private void createSLFile(InputStream fileContent, HttpServletResponse response) throws ServletException, IOException{
+        PrintWriter out = response.getWriter();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileContent));
+        String line = "";
+
+        while ((line = bufferedReader.readLine()) != null) {
+            out.print(line + "\n");
+        }
+
+    }
 
 
 
