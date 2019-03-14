@@ -3,15 +3,20 @@ package files;
 import java.util.ArrayList;
 
 public class SLMethod {
-    private String scope;
+    private String accessor;
     private String name;
     private String returnType;
     private ArrayList parameters;
 
-    public SLMethod(String name) {
+    public SLMethod(String name, String accessor) {
         this.name = name;
+        this.accessor = accessor;
         //this.returnType = returnType;
         //this.parameters = parameters;
+    }
+
+    public String getAccessor(){
+        return accessor;
     }
 
     public String getName() {

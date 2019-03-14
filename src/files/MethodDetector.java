@@ -24,6 +24,7 @@ public class MethodDetector {
                 while ((st1 = br1.readLine()) != null) {
                     st2 = br2.readLine();
                     String name = "";
+                    String accessor = "";
 
                     if(isMethod(st1, st2)){
                         String[] subParts = st1.split(" ");
@@ -33,10 +34,12 @@ public class MethodDetector {
                             }
                             else if(subParts[i].startsWith("(")){
                                 name = subParts[i-1];
-                                break;
+                            }
+                            if(subParts[i].matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)")){
+                                accessor += " " + subParts[i];
                             }
                         }
-                        methods.add(new SLMethod(name));
+                        methods.add(new SLMethod(name,accessor));
                     }
 
                 }
@@ -44,7 +47,7 @@ public class MethodDetector {
                 System.out.println(fileDir.getName());
                 System.out.println(methods.size());
                 for (int i = 0; i < methods.size(); i++) {
-                    System.out.println(methods.get(i).getName());
+                    System.out.println(methods.get(i).getAccessor() + " " + methods.get(i).getName());
                 }
                 System.out.println();
             }
@@ -59,7 +62,7 @@ public class MethodDetector {
             st2Copy = secondLine.replaceAll(" ", "");
         }
 
-        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)\\{")){
+        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)\\{")){
             System.out.println(firstLine);
             return true;
         }
@@ -67,7 +70,7 @@ public class MethodDetector {
             System.out.println(firstLine);
             return true;
         }
-        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)") && st2Copy.startsWith("{")){
+        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)") && st2Copy.startsWith("{")){
             return true;
         }
         if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*") && !firstLine.contains("else if") && st2Copy.startsWith("{")){
