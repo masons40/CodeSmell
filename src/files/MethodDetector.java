@@ -14,7 +14,6 @@ public class MethodDetector {
         //loops through each file in the directory
         for (File fileDir : dir.listFiles()) {
             ArrayList<SLMethod> methods = new ArrayList<>();
-
             if(fileDir.getName().substring(fileDir.getName().indexOf(".") + 1).equals("java")) {
                 BufferedReader br1 = new BufferedReader(new FileReader(fileDir));
                 BufferedReader br2 = new BufferedReader(new FileReader(fileDir));
@@ -24,22 +23,24 @@ public class MethodDetector {
 
                 while ((st1 = br1.readLine()) != null) {
                     st2 = br2.readLine();
+                    String name = "";
 
-                    if (isMethod(st1, st2)) {
-                        String[] parts = st1.split(" ");
-                        for (int x = 0; x < parts.length; x++) {
-                            if (parts[x].contains("(")) {
-                                String[] subParts = parts[x].split("\\(");
-                                if (!st1.replaceAll(" ", "").startsWith(subParts[0]) && !subParts[0].contains(".")) {
-                                    methods.add(new SLMethod(subParts[0]));
-                                }
+                    if(isMethod(st1, st2)){
+                        String[] subParts = st1.split(" ");
+                        for(int i = 0; i < subParts.length; i++){
+                            if(subParts[i].contains("(") && !subParts[i].startsWith("(")){
+                                name = subParts[i].split("\\(")[0];
+                            }
+                            else if(subParts[i].startsWith("(")){
+                                name = subParts[i-1];
+                                break;
                             }
                         }
+                        methods.add(new SLMethod(name));
                     }
 
                 }
 
-                //print out the file name and all of its methods
                 System.out.println(fileDir.getName());
                 System.out.println(methods.size());
                 for (int i = 0; i < methods.size(); i++) {
@@ -51,39 +52,28 @@ public class MethodDetector {
 
     }
 
-    //method to check if a line follows certain elements of a method signature
     public static boolean isMethod(String firstLine, String secondLine){
         String st1Copy = firstLine.replaceAll(" ", "");
+        String st2Copy = "";
+        if(secondLine!=null) {
+            st2Copy = secondLine.replaceAll(" ", "");
+        }
 
-        /*case when method declared like:
-           methodName(){
-               ....
-           }
-        */
-        if (st1Copy.contains(")") && st1Copy.endsWith("{") && !st1Copy.contains("elseif")){// && !st1Copy.contains("if(") && !st1Copy.contains("for(") && !st1Copy.contains("while(")
+        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)\\{")){
+            System.out.println(firstLine);
             return true;
         }
-
-        /*case when method declared like:
-           methodName(){....}
-        */
-        else if (st1Copy.contains(")") && st1Copy.endsWith("}") && !st1Copy.contains("elseif")){// && !st1Copy.contains("if(") && !st1Copy.contains("for(") && !st1Copy.contains("while(")
+        if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*\\{\\s*") && !firstLine.contains("else if")){
+            System.out.println(firstLine);
             return true;
         }
-
-        /*case when method declared like:
-           methodName()
-           {
-               ....
-           }
-        */
-        else if ((st1Copy.contains(")") && secondLine.replaceAll(" ","").startsWith("{")) && !st1Copy.contains("elseif")){// && !st1Copy.contains("if(") && !st1Copy.contains("for(") && !st1Copy.contains("while(")
+        if(st1Copy.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)([a-zA-Z]+)([a-zA-Z]+)\\(.*\\)") && st2Copy.startsWith("{")){
             return true;
         }
-
-        else {
-            return false;
+        if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*") && !firstLine.contains("else if") && st2Copy.startsWith("{")){
+            return true;
         }
+        return false;
     }
 
 }
