@@ -1,11 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: mason
-  Date: 10/02/2019
-  Time: 17:01
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -15,11 +8,12 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Rajdhani|Teko" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 </head>
 <body>
 <header>
+  <img src="resources/images/cb1.jpg" id="bg-image"/>
   <div>
     <a href="">Sniffing Lines</a>
   </div>
@@ -33,11 +27,20 @@
 </header>
 
 <div id="file-box">
-  <form method="POST" action="/SmellTest_war_exploded/Home" enctype="multipart/form-data">
+  <form method="POST" action="/SmellTest_war_exploded/Home" enctype="multipart/form-data" id="data-collection-form" name="data-collection-form">
     <h1>Upload to smell code</h1>
-    <input type="text" name="Cname" value="Company Name">
+    <p id="data-collection-form-message"><i class="fas fa-exclamation-triangle" style="color:red;font-size:0.6em;"></i></p>
+    <input type="text" name="Cname" placeholder="Company Name" id="company_name">
     <input type="file" id="files-box" name="file"  multiple="true">
-    <button>Smell Code</button>
+    <select name="selection-value">
+      <option value="zip">Zip File</option>
+      <option value="java">Java Source File</option>
+      <option value="jar">Jar</option>
+    </select>
+    <!--
+  <input type="checkbox" name="check-inputs" id="check-box">All Boxes a filled in correctly<br>
+-->
+    <button type="submit" id="data-collection-button">Smell Code</button>
   </form>
 </div>
 
@@ -49,4 +52,3 @@
 <script src="resources/script/script.js"></script>
 </body>
 </html>
-

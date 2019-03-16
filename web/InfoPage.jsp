@@ -11,6 +11,8 @@
     <title>InfoPage</title>
 </head>
 <body>
-    <h2>setdrfyg</h2>
+    <img src="resources/images/sniff.gif" />
+
+    <h1>That's some good code right there</h1>
 </body>
 </html>
