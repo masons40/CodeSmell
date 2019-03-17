@@ -3,6 +3,8 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class Home extends HttpServlet {
         String extension = request.getParameter("selection-value");
         String filePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir;
         File file = new File(filePath);
+        String fileName="";
 
         if(!file.exists()) {
             file.mkdir(); //Create file directory
@@ -36,28 +39,16 @@ public class Home extends HttpServlet {
         }else if(extension.equals("jar")){
 
         }else {
-            String fileZip = "src/main/resources/unzipTest/compressed.zip";
-            File destDir = new File("../resources/unzipTest");
-            byte[] buffer = new byte[1024];
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
-            ZipEntry zipEntry = zis.getNextEntry();
-            while (zipEntry != null) {
-                File newFile = newFile(destDir, zipEntry);
-                FileOutputStream fos = new FileOutputStream(newFile);
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-                fos.close();
-                zipEntry = zis.getNextEntry();
-            }
-            zis.closeEntry();
-            zis.close();
+            Part zipfile = request.getPart("file");
+            fileName = Paths.get(zipfile.getSubmittedFileName()).getFileName().toString();
+            zipfile.write(filePath+File.separator+fileName);
+            unZipFile(filePath+File.separator+zipfile.getSubmittedFileName(), filePath);
         }
 
-        //deleteFolder(file);
-        //out.print(file.toString());
-        response.sendRedirect("InfoPage.jsp");
+        deleteDataFolder(new File(filePath +File.separator+ fileName), false);
+
+        out.print(new File(filePath +File.separator+ fileName).toString());
+        //response.sendRedirect("InfoPage.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -89,27 +80,48 @@ public class Home extends HttpServlet {
         }
     }
 
-    private static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        File destFile = new File(destinationDir, zipEntry.getName());
+    private void unZipFile(String zipFilePath,String unzipLocation) throws IOException {
+        Files.createDirectories(Paths.get(unzipLocation));
 
-        String destDirPath = destinationDir.getCanonicalPath();
-        String destFilePath = destFile.getCanonicalPath();
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFilePath))) {
+            ZipEntry nextEntry = zipInputStream.getNextEntry();
+            while (nextEntry != null) {
+                Path filePath = Paths.get(unzipLocation, nextEntry.getName());
+                if (!nextEntry.isDirectory()) {
+                    unzipFiles(zipInputStream, filePath);
+                } else {
+                    Files.createDirectories(filePath);
+                }
 
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+                zipInputStream.closeEntry();
+                nextEntry = zipInputStream.getNextEntry();
+            }
+        }
+    }
+    private void unzipFiles(ZipInputStream zipInputStream,Path filePath) throws IOException {
+
+        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath.toAbsolutePath().toString()))) {
+            byte[] bytesIn = new byte[1024];
+            int len = 0;
+            while ((len = zipInputStream.read(bytesIn)) != -1) {
+                bos.write(bytesIn, 0, len);
+            }
         }
 
-        return destFile;
     }
 
-    public static void deleteFolder(File folder) {
+    private void deleteDataFolder(File folder, boolean multiple) {
         File[] files = folder.listFiles();
-        if(files!=null) { //some JVMs return null for empty dirs
-            for(File f: files) {
-                if(f.isDirectory()) {
-                    deleteFolder(f);
-                } else {
-                    f.delete();
+        if(files!=null) {
+            if(!multiple){
+                folder.delete();
+            }else {
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        deleteDataFolder(f, true);
+                    } else {
+                        f.delete();
+                    }
                 }
             }
         }
