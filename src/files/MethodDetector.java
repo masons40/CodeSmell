@@ -94,10 +94,10 @@ public class MethodDetector {
 
         String className = fileName.split("\\.")[0];
 
-        if(firstLineNoSpaces.matches("([a-zA-Z]+)\\(.*\\)\\{") && firstLineNoSpaces.contains(className)){
+        if(firstLineNoSpaces.matches("([a-zA-Z]+)\\(.*\\)\\{") && firstLineNoSpaces.split("\\(")[0].equals(className)){
             return true;
         }
-        else if(firstLineNoSpaces.matches("([a-zA-Z]+)\\(.*\\)") && firstLineNoSpaces.contains(className) && st2Copy.startsWith("{")){
+        else if(firstLineNoSpaces.matches("([a-zA-Z]+)\\(.*\\)") && firstLineNoSpaces.split("\\(")[0].equals(className) && st2Copy.startsWith("{")){
             return true;
         }
         else{
