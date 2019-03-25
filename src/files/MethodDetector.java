@@ -1,59 +1,50 @@
 package files;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MethodDetector {
 
-    //method checks a directory of java files and prints all of the methods declared in the java files
-    public void checkForMethods(String directoryAddress) throws Exception {
-        File dir = new File(directoryAddress);
+    public MethodDetector(){
 
-        for (File file : dir.listFiles()) {
-            ArrayList<SLMethod> methods = new ArrayList<>();
+    }
 
-            if(file.getName().substring(file.getName().indexOf(".") + 1).equals("java")) {
-                BufferedReader br1 = new BufferedReader(new FileReader(file));
-                BufferedReader br2 = new BufferedReader(new FileReader(file));
+    public ArrayList<SLMethod> getMethods(File file) throws Exception {
 
-                String firstLine;
-                String secondLine = br2.readLine();
+        ArrayList<SLMethod> methods = new ArrayList<>();
 
-                while ((firstLine = br1.readLine()) != null) {
-                    secondLine = br2.readLine();
-                    String name = "";
-                    String accessor = "";
-                    String returnType = "";
-                    ArrayList<String> parameters = new ArrayList<String>();
-                    String[] firstLineSplit = firstLine.split(" ");
+        BufferedReader br1 = new BufferedReader(new FileReader(file));
+        BufferedReader br2 = new BufferedReader(new FileReader(file));
 
-                    if(isMethod(firstLine, secondLine)){
-                        name = findMethodName(firstLineSplit);
-                        accessor = findAccessor(firstLineSplit);
-                        returnType = findReturnType(firstLineSplit,name);
-                        parameters = findParameters(firstLine);
+        String firstLine;
+        String secondLine = br2.readLine();
 
-                        methods.add(new SLMethod(name, accessor, returnType, parameters));
+        while ((firstLine = br1.readLine()) != null) {
+            secondLine = br2.readLine();
+            String name = "";
+            String accessor = "";
+            String returnType = "";
+            ArrayList<String> parameters = new ArrayList<String>();
+            String[] firstLineSplit = firstLine.split(" ");
 
-                    }
-                    else if(isConstructor(firstLine,secondLine,file.getName())){
-                        name = findMethodName(firstLineSplit);
-                        parameters = findParameters(firstLine);
-                        methods.add(new SLMethod(name,accessor,returnType,parameters));
-                    }
-                }
+            if(isMethod(firstLine, secondLine)){
+                name = findMethodName(firstLineSplit);
+                accessor = findAccessor(firstLineSplit);
+                returnType = findReturnType(firstLineSplit,name);
+                parameters = findParameters(firstLine);
 
-                System.out.println(file.getName());
-                for (int i = 0; i < methods.size(); i++) {
-                    System.out.println(methods.get(i).toString());
-                }
-                System.out.println();
+                methods.add(new SLMethod(name, accessor, returnType, parameters));
+
             }
-        }
+            else if(isConstructor(firstLine,secondLine,file.getName())){
+                name = findMethodName(firstLineSplit);
+                parameters = findParameters(firstLine);
+                methods.add(new SLMethod(name,accessor,returnType,parameters));
+            }
 
+        }
+        return methods;
     }
 
     public static boolean isMethod(String firstLine, String secondLine){
