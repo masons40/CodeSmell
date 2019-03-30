@@ -90,7 +90,7 @@ $("document").ready(function(){
             }
         }
 
-        if(ext=="jar" || ext=="zip"){
+        if(ext=="zip"){
             if(files_count==1){
                 correct_message("#data-collection-form-message", "All is correct, please press the smell button");
                 return true;
