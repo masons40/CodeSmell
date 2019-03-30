@@ -1,6 +1,9 @@
 package files;
 import java.util.ArrayList;
 
+/*
+Class used to represent a method
+ */
 public class SLMethod {
     private String accessor;
     private String name;
