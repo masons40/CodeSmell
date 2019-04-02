@@ -86,6 +86,29 @@ public class VariableDetector {
     public String findName(String[] lineSplit) {
         String name = "";
 
+        for (int i=0; i<lineSplit.length; i++) {
+            if (lineSplit[i].contains("=")) {
+                //variable declaration and assigning a value too using = sign
+                if (lineSplit[i].matches("[a-zA-Z0-9_]+(=)")) {
+                    name = lineSplit[i].substring(0,lineSplit[i].length()-1);
+                } else if (lineSplit[i].matches("(=).*")) {
+                    name = lineSplit[i-1];
+                } else if (lineSplit[i].matches("[a-zA-Z0-9_]+(=).*")) {
+                    String[] noSpacesBetweenEqual = lineSplit[i].split("=");
+                    name = noSpacesBetweenEqual[0];
+                }
+            } else if (lineSplit[i].contains(";")&&(name.length()<1)) {
+                if (lineSplit[i].matches("[a-zA-Z0-9_]+(;)")) {
+                    //variable declaration without assigning a value to it
+                    name = lineSplit[i].substring(0,lineSplit[i].length()-1);
+                } else {
+                    //space between semicolon and variable name (bad)
+                    String[] noSpacesBetweenSemiColon = lineSplit[i-1].split("\\s+");
+                    name = noSpacesBetweenSemiColon[0];
+                }
+            }
+        }
+
         return name;
     }
 
