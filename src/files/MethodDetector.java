@@ -6,10 +6,6 @@ import java.util.Arrays;
 
 public class MethodDetector {
 
-    public MethodDetector(){
-
-    }
-
     //Method takes in a file reads through it and returns an arrayList of methods
     public ArrayList<SLMethod> getMethods(File file) throws Exception {
 
@@ -166,7 +162,12 @@ public class MethodDetector {
         for(int i = 0; i<firstLineSplit.length; i++) {
             //if string is an accessModifier and next string in array is not then next string is the return type
             if (firstLineSplit[i].matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)") && !firstLineSplit[i + 1].matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)") && !firstLineSplit[i + 1].contains(name)) {
-                returnType = firstLineSplit[i + 1];
+                if(firstLineSplit[i+1].matches("HashMap<.*,")){
+                    returnType = firstLineSplit[i + 1] + firstLineSplit[i + 2];
+                }
+                else{
+                    returnType = firstLineSplit[i + 1];
+                }
             }
         }
         //if no return type has been found it means there is no accessor and therefor
