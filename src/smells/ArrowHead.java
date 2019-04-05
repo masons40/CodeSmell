@@ -1,4 +1,4 @@
-//Static Class to detect maximum depth of if blocks for each method
+//Static Class to detect maximum depth of conditional blocks for each method
 package smells;
 
 import java.io.BufferedReader;
@@ -6,49 +6,106 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ArrowHead extends SmellDetector{
 
-	String conditionalBlockType = String.format("(if|else|ifelse|switch|while|do|for|try|do)");
+	String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
 
 	public ArrowHead() {}
 
-	public HashMap<String, Float> evaluate(File file) throws Exception{
+	//Return HashMap of FirstCondition(String) -> Maximum Depth Reached(Int)
+	public HashMap<String, Integer> evaluate(File file) throws Exception{
 		BufferedReader br = new BufferedReader(new FileReader(file));
+		HashMap<String, Integer> maxDepthsOfClass = new HashMap<>(); //Condition -> Max Conditional Depth
 		String line;
 
 		while ((line = br.readLine()) != null) {
-			//String[] lineSplit =line.split("\\s+");
+			//TODO: file may already have no spaces after going through parser?
+			line = line.replaceAll("\\s+", "");
 
-			if (isBlock(line)){
-				System.out.println(line);
-				int depth = 0;
-				int maxDepth = countDepth(br, depth);
+			if (isConditionalBlock(line)){ //Enter main condition block
+				String mainCondition = findCondition(line);
+				int maxDepth = countDepth(br, line);
+				maxDepthsOfClass.put(mainCondition, maxDepth);
 			}
 
 		}
 		br.close();
 
-		return null;
+		System.out.println(maxDepthsOfClass);
+		return maxDepthsOfClass;
 	}
 
-	int countDepth(BufferedReader br, int depth) {
-		depth++;
-		Stack<Character> currDepth = new Stack<>();
+	//Count depth of conditional blocks within a conditional block
+	int countDepth(BufferedReader br, String line) throws Exception {
+		Stack<String> currConditions = new Stack<>();
+		String condition = findCondition(line);
+		currConditions.push(condition);
+		int maxDepth = 1; //=currConditions.size();
+		boolean expectOpenBracket = !endsWithOpenBracket(line); //if line = "if(..) {"
+		System.out.println("d:\t" + currConditions.size() + " " + line);
 
-		return depth;
+		while(!currConditions.isEmpty() && (line = br.readLine()) != null) { //While the br reads within the main condition block
+			line = line.replaceAll("\\s+", ""); //TODO remove with filter
+			if(expectOpenBracket && !endsWithOpenBracket(line) && !isEmpty(line)) { //previous condition line was not followed by "{"
+				currConditions.pop(); //Remove from stack
+			}
+
+			//Search for conditional block in the line
+			if(isConditionalBlock(line)) {
+				//Extract condition statement within brackets
+				condition = findCondition(line);
+				currConditions.push(condition);
+				expectOpenBracket = !endsWithOpenBracket(line);
+
+			} else {
+				expectOpenBracket = false;
+			}
+
+			Pattern pattern = Pattern.compile("[^}]*}");
+			Matcher matcher = pattern.matcher(line);
+			int numCloseBrackets = 0;
+			while (matcher.find())
+				numCloseBrackets++;
+
+			if(numCloseBrackets>0) {
+				for(;numCloseBrackets>0;numCloseBrackets--) {
+					currConditions.pop();
+				}
+			}
+
+			maxDepth = Math.max(maxDepth,currConditions.size());
+			System.out.println("*d:\t" + currConditions.size() + " " + line);
+		}
+		return maxDepth;
+	}
+
+	//Return ((condition)) between parenthesis
+	private String findCondition(String line) {
+		String condition = "";
+		Matcher m = Pattern.compile("\\(([^()]+)\\)").matcher(line);
+		if(m.find())
+			condition = m.group(1);
+		return condition;
 	}
 
 	//Does this line contain "if (...)" or something similar?
-	public boolean isBlock(String line){
-		//Remove all whitespace
-		line = line.replaceAll("\\s+", "");
-		if (line.matches(conditionalBlockType+"\\(.*")) {
-			return true;
-		}
-		else
-			return false;
+	private boolean isConditionalBlock(String line){
+		return (line.matches(conditionalBlockType+"\\(.*\\).*"));
+	}
+
+	private boolean endsWithOpenBracket(String line) {
+		return (line.matches(".*\\{\\Z"));
+	}
+
+	private boolean isEmpty(String line) {
+		return line.matches("^[ \t\r\n]*\\Z");
+	}
+
+	private boolean endsWithCloseBracket(String line) {
+		return (line.matches(".*\\}\\Z"));
 	}
 
 
