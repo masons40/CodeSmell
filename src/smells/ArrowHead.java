@@ -34,7 +34,6 @@ public class ArrowHead extends SmellDetector{
 		}
 		br.close();
 
-		System.out.println(maxDepthsOfClass);
 		return maxDepthsOfClass;
 	}
 
@@ -45,7 +44,6 @@ public class ArrowHead extends SmellDetector{
 		currConditions.push(condition);
 		int maxDepth = 1; //=currConditions.size();
 		boolean expectOpenBracket = !endsWithOpenBracket(line); //if line = "if(..) {"
-		System.out.println("d:\t" + currConditions.size() + " " + line);
 
 		while(!currConditions.isEmpty() && (line = br.readLine()) != null) { //While the br reads within the main condition block
 			line = line.replaceAll("\\s+", ""); //TODO remove with filter
@@ -77,7 +75,6 @@ public class ArrowHead extends SmellDetector{
 			}
 
 			maxDepth = Math.max(maxDepth,currConditions.size());
-			System.out.println("*d:\t" + currConditions.size() + " " + line);
 		}
 		return maxDepth;
 	}
