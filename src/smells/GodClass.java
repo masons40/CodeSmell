@@ -32,6 +32,10 @@ public class GodClass {
         return numOfNonPrimitive>20;
     }
 
+    /*
+    cohesion refers to how many methods inside a class that are
+    relevant to that class only
+     */
     private boolean hasLowCohesion(SLClass cls){
         int numPrivateMethods = 0;
         int numPublicMethods = 0;
@@ -40,11 +44,11 @@ public class GodClass {
             if(method.getAccessor().contains("public")){
                 numPublicMethods++;
             }
-            else if(method.getAccessor().contains("public")){
+            else if(method.getAccessor().contains("private")){
                 numPrivateMethods++;
             }
         }
 
-        return numPrivateMethods>numPublicMethods;
+        return numPublicMethods>numPrivateMethods;
     }
 }
