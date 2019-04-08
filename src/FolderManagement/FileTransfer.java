@@ -35,7 +35,7 @@ public class FileTransfer {
         javaFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + java_dir;
         classFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + class_dir;
 
-        fileCreator();
+        fileCreator(); //Create file objects from paths
         fileTransferring();
         deleteDataFolder(new File(mainFilePath+File.separator + fileName));
         File[] zipFile = new File(mainFilePath+File.separator+mainName).listFiles();

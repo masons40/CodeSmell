@@ -1,7 +1,6 @@
 //Static Class to detect maximum depth of conditional blocks for each method
 
 package smells;
-import com.sun.deploy.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -102,19 +101,19 @@ public class ArrowHead extends SmellDetector{
 
 	//Does this line contain "if (...)" or something similar?
 	private boolean isConditionalBlock(String line){
-		return (line.matches("\\{*"+conditionalBlockType+"\\(.*\\).*"));
+		return (line.matches("\\{?"+conditionalBlockType+"\\(.*\\).*"));
 	}
 
 	private boolean endsWithOpenBracket(String line) {
 		return (line.matches(".*\\{\\Z"));
 	}
 
-	private boolean isEmpty(String line) {
-		return line.matches("^[ \t\r\n]*\\Z");
-	}
+//	private boolean isEmpty(String line) {
+//		return line.matches("^[ \t\r\n]*\\Z");
+//	}
 
 	private boolean endsWithCloseBracket(String line) {
-		return (line.matches(".*^[\\{].*\\}\\Z"));
+		return (line.matches(".*^((?!\\{).)*\\}$"));
 	}
 
 	private boolean startsWithOpenBracket(String line) {
