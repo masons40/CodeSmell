@@ -1,5 +1,7 @@
 //Static Class to detect maximum depth of conditional blocks for each method
-package  smells;
+
+package smells;
+import com.sun.deploy.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +11,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArrowHead extends SmellDetector {
-
+public class ArrowHead extends SmellDetector{
 
 	String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
 
@@ -18,9 +19,8 @@ public class ArrowHead extends SmellDetector {
 
 	public HashMap<String, Integer> evaluate(File file) throws Exception{
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		//Condition -> Max Conditional Depth
-		HashMap<String, Integer> maxDepthsOfClass = new HashMap<>();
-		String line;
+		HashMap<String, Integer> maxDepthsOfClass = new HashMap<>(); //Condition -> Max Conditional Depth
+		String line="";
 
 		while ((line = br.readLine()) != null) {
 			//TODO: file may already have no spaces after going through parser?
@@ -31,7 +31,6 @@ public class ArrowHead extends SmellDetector {
 				int maxDepth = countDepth(br, line);
 				maxDepthsOfClass.put(mainCondition, maxDepth);
 			}
-
 		}
 		br.close();
 		return maxDepthsOfClass;
@@ -39,39 +38,51 @@ public class ArrowHead extends SmellDetector {
 
 	//Count depth of conditional blocks within a conditional block
 	int countDepth(BufferedReader br, String line) throws Exception {
-		Stack<String> currConditions = new Stack<>();
-		String condition = findCondition(line);
-		currConditions.push(condition);
+		/*  Create stack to track current condition
+		    1 ->    if condition ends with "{" (lasting)
+			0 ->    if condition does not ends with "{" (temp)
+		 */
+		Stack<Integer> currConditions = new Stack<>();
+		boolean expectOpenBracket = false;
+		//String condition = findCondition(line);
+		if(endsWithOpenBracket(line))   //lasting
+			currConditions.push(1);
+		else {                         //temp
+			currConditions.push(0);
+			expectOpenBracket = true;
+		}
 		int maxDepth = currConditions.size();
-		boolean expectOpenBracket = !endsWithOpenBracket(line); //line = "if(...)", so expect a "{"
 
 		while(!currConditions.isEmpty() && (line = br.readLine()) != null) { //While the br reads within the main condition block
 			line = line.replaceAll("\\s+", ""); //TODO remove with filter
-			if(expectOpenBracket && !endsWithOpenBracket(line) ) { //previous condition line was not followed by "{"
-				if(!isConditionalBlock(line))
-					currConditions.clear(); //Remove ALL elements from stack
+			if(expectOpenBracket) { //Previous temp condition was actually lasting
+				if(!currConditions.isEmpty() && startsWithOpenBracket(line)) {
+					currConditions.pop();
+					currConditions.push(1);
+				}
 			}
 
+			if(!isConditionalBlock(line)){
+				while(!currConditions.isEmpty() && currConditions.peek()==0)
+					currConditions.pop();
+			}
+
+			if(startsWithCloseBracket(line)) {
+				if(!currConditions.isEmpty() && currConditions.peek()==1)
+					currConditions.pop();
+				while(!currConditions.isEmpty() && currConditions.peek()==0)
+					currConditions.pop();
+			}
+
+			expectOpenBracket = false;
 			//Search for conditional block in the line
 			if(isConditionalBlock(line)) {
 				//Extract condition statement within brackets
-				condition = findCondition(line);
-				currConditions.push(condition);
-				expectOpenBracket = !endsWithOpenBracket(line);
-
-			} else {
-				expectOpenBracket = false;
-			}
-
-			//pop currConditions stack for each "}" found
-			Pattern pattern = Pattern.compile("[^}]*}");
-			Matcher matcher = pattern.matcher(line);
-			int numCloseBrackets = 0;
-			while (matcher.find())
-				numCloseBrackets++;
-			if(numCloseBrackets>0) {
-				for(;numCloseBrackets>0;numCloseBrackets--) {
-					currConditions.pop();
+				if(endsWithOpenBracket(line))   //lasting
+					currConditions.push(1);
+				else {                         //temp
+					currConditions.push(0);
+					expectOpenBracket = true;
 				}
 			}
 
@@ -91,7 +102,7 @@ public class ArrowHead extends SmellDetector {
 
 	//Does this line contain "if (...)" or something similar?
 	private boolean isConditionalBlock(String line){
-		return (line.matches(conditionalBlockType+"\\(.*\\).*"));
+		return (line.matches("\\{*"+conditionalBlockType+"\\(.*\\).*"));
 	}
 
 	private boolean endsWithOpenBracket(String line) {
@@ -103,7 +114,15 @@ public class ArrowHead extends SmellDetector {
 	}
 
 	private boolean endsWithCloseBracket(String line) {
-		return (line.matches(".*\\}\\Z"));
+		return (line.matches(".*^[\\{].*\\}\\Z"));
+	}
+
+	private boolean startsWithOpenBracket(String line) {
+		return(line.matches("^\\{.*"));
+	}
+
+	private boolean startsWithCloseBracket(String line) {
+		return(line.matches("^\\}.*"));
 	}
 
 
