@@ -17,7 +17,6 @@ public class GodClass {
         else {
             return false;
         }
-
     }
 
     private boolean isLoosleyCoupled(SLClass cls){

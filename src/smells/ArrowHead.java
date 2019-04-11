@@ -2,9 +2,11 @@
 
 package smells;
 
+import files.SLClass;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -16,23 +18,28 @@ public class ArrowHead extends SmellDetector{
 
 	public ArrowHead() {}
 
-	public HashMap<String, Integer> evaluate(File file) throws Exception{
+	public ArrayList<ArrowHeadSmell> evaluate(File file, SLClass originalClass) throws Exception{
+		lineCount = 0;
+		int startLineCount = 0;
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		HashMap<String, Integer> maxDepthsOfClass = new HashMap<>(); //Condition -> Max Conditional Depth
+		ArrayList<ArrowHeadSmell> ArrowHeadSmells = new ArrayList<>(); //Condition -> Max Conditional Depth
 		String line="";
 
 		while ((line = br.readLine()) != null) {
-			//TODO: file may already have no spaces after going through parser?
 			line = line.replaceAll("\\s+", "");
 
 			if (isConditionalBlock(line)){ //Enter main condition block
+				startLineCount = lineCount;
 				String mainCondition = findCondition(line);
 				int maxDepth = countDepth(br, line);
-				maxDepthsOfClass.put(mainCondition, maxDepth);
+				ArrowHeadSmell newSmell = new ArrowHeadSmell(mainCondition, maxDepth,
+															startLineCount, lineCount, originalClass);
+				ArrowHeadSmells.add(newSmell);
 			}
+			lineCount++;
 		}
 		br.close();
-		return maxDepthsOfClass;
+		return ArrowHeadSmells;
 	}
 
 	//Count depth of conditional blocks within a conditional block
@@ -86,6 +93,7 @@ public class ArrowHead extends SmellDetector{
 			}
 
 			maxDepth = Math.max(maxDepth,currConditions.size());
+			lineCount++;
 		}
 		return maxDepth;
 	}

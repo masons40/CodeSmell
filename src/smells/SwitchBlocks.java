@@ -1,14 +1,12 @@
 /**
  * Return hashmap of Switch Conditions -> Number Cases
  */
-
-
 package smells;
-
+import files.SLClass;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,22 +16,22 @@ public class SwitchBlocks extends SmellDetector{
 	public SwitchBlocks(){
 	}
 
-	public HashMap<String, Integer> evaluate(File file) throws Exception{
+	public ArrayList<SwitchBlocksSmell> evaluate(File file, SLClass originalClass) throws Exception{
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		HashMap<String, Integer> switchBlocks = new HashMap<>(); //Variable -> Number of Cases
+		ArrayList<SwitchBlocksSmell> switchBlocks = new ArrayList<>(); //Variable -> Number of Cases
 		Stack<Character> brackets = new Stack<>();
 		Pattern openBracket = Pattern.compile("[^\\{]*\\{");
 		Pattern closeBracket = Pattern.compile("[^\\}]*\\}");
 		String line="", condition="";
-		int lineCount = 0;
 		boolean readingSwitchBlock = false;
 		int numCases=0;
+		int startLine = 0;
 
 		while ((line = br.readLine()) != null) {
-			lineCount++;
 			line = line.replaceAll("\\s+", "");
 			if(line.matches("switch\\(.*")) { //If line contains keyword "switch"
 				readingSwitchBlock= true;
+				startLine = lineCount;
 				//Extract switch variable within parenthesis
 				condition = findCondition(line);
 			}
@@ -49,14 +47,17 @@ public class SwitchBlocks extends SmellDetector{
 				while (matcher.find()) {
 					brackets.pop();
 				}
-				if(brackets.isEmpty()) {
-					switchBlocks.put(condition, numCases);
+				if(brackets.isEmpty()) { //reached end of switch block
+					SwitchBlocksSmell newSmell = new SwitchBlocksSmell(condition, numCases, startLine, lineCount, originalClass);
+					switchBlocks.add(newSmell);
 					numCases=0;
+					startLine=0;
 					readingSwitchBlock = false;
 				}
 			}
+			lineCount++;
 		}
-		
+
 		return switchBlocks;
 	}
 
