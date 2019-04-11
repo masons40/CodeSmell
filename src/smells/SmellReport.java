@@ -18,4 +18,10 @@ abstract class SmellReport{
 		this.endLine = endLine;
 		this.originalClass = originalClass;
 	}
+
+	public SLClass getOriginalClass() { return originalClass; }
+
+	public int getStartLine() { return  startLine; }
+
+	public int getEndLine() { return  endLine; }
 }
