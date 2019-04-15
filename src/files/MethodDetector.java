@@ -126,7 +126,7 @@ public class MethodDetector {
     }
 
     //method finds the name of a method using a string array of each part of the method declaration split at " "
-    public static String findMethodName(String[] firstLineSplit){
+    private static String findMethodName(String[] firstLineSplit){
         String name = "";
         for(int i = 0; i < firstLineSplit.length; i++) {
             /*if the string contains "(" and it doesn't start with the bracket the name
@@ -144,7 +144,7 @@ public class MethodDetector {
     }
 
     //method finds the access modifiers of a method using a string array of each part of the method declaration split at " "
-    public static String findAccessModifier(String[] firstLineSplit){
+    private static String findAccessModifier(String[] firstLineSplit){
         String accessor = "";
         //if string matches one of the access modifiers add this modifier to the string
         for(int i = 0; i < firstLineSplit.length; i++) {
@@ -156,7 +156,7 @@ public class MethodDetector {
     }
 
     //method finds the return type of a method using a string array of each part of the method declaration split at " "
-    public static String findReturnType(String[] firstLineSplit, String name){
+    private static String findReturnType(String[] firstLineSplit, String name){
         String returnType = "";
 
         for(int i = 0; i<firstLineSplit.length; i++) {
@@ -187,7 +187,7 @@ public class MethodDetector {
     }
 
     //method finds the access parameters of a method using the
-    public static ArrayList<String> findParameters(String firstline){
+    private static ArrayList<String> findParameters(String firstline){
         ArrayList<String> parameters = new ArrayList<String>();
         String allParams = "";
         //split the first line at "(" we will be concerned with the second half of this split

@@ -6,9 +6,8 @@ import java.util.ArrayList;
 
 /*
 A God Class is a class which either knows or does too much
-To see if a class is a god class or not, a number of metrics will be needed to detect
-this. We will try to detect this by seeing how much access a class has to foreign data,
-how much the object does that doesn't relate to itself, the number of lines and the number
+To see if a class is a god class or not, certain metrics will be needed to detect
+this. We will try to detect this by looking at the number of lines and the number
 of methods in the class
  */
 public class GodClasses {
@@ -18,29 +17,34 @@ public class GodClasses {
         this.classes = classes;
     }
 
-    public ArrayList<SLClass> findGodClass() throws IOException {
+    /*
+    Firstly calculate the average god score of all the classes
+    then compare the god score of each class to the average and if
+    it has a score greater than 2 and a half time the average
+     */
+    public ArrayList<SLClass> findGodClasses() throws IOException {
         ArrayList<SLClass> godClasses = new ArrayList<>();
 
         double avgGodScore = 0;
 
-        //calculate avg "godScore"
         for (SLClass clazz:classes) {
             File file = new File("filepath" + clazz.getName());
-            int numLines = (int) file.length();
+            int numLines = getNumOfFileLines(file);
+
             int numMethods = clazz.getMethods().size();
             avgGodScore += calculateGodScore(numLines,numMethods);
         }
 
         avgGodScore = avgGodScore/classes.size();
 
-        //check if each classes godScore is twice the size or more than the average
         for (SLClass clazz:classes) {
             File file = new File("filepath" + clazz.getName());
-            int numLines = (int) file.length();
+            int numLines = getNumOfFileLines(file);
+
             int numMethods = clazz.getMethods().size();
             double godScore = calculateGodScore(numLines,numMethods);
 
-            if(godScore >= (2*avgGodScore)){
+            if(godScore >= (2.5*avgGodScore)){
                 godClasses.add(clazz);
             }
         }
@@ -51,6 +55,26 @@ public class GodClasses {
 
     private double calculateGodScore(int numOfLines, int numOfMethods){
         return (numOfLines*0.1)+(numOfMethods*0.7);
+    }
+
+    private static int getNumOfFileLines(File file) throws IOException {
+        if(file.exists()){
+            FileReader fr = new FileReader(file);
+            LineNumberReader lnr = new LineNumberReader(fr);
+
+            int numLines=0;
+
+            while (lnr.readLine() != null){
+                numLines++;
+            }
+
+            lnr.close();
+            return numLines;
+        }
+        else{
+            System.out.println("File does not exist");
+            return 0;
+        }
     }
 
     /*
