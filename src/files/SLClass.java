@@ -62,6 +62,15 @@ public class SLClass {
         classBools.put(m, true);
     }
 
+
+
+    // get rid of this method in the future, only needed now because the god class uses it
+    public void getMethods(){
+
+    }
+
+
+
     public void setClassName(String s){
         if(s.contains("{")){
             className = s.substring(0, s.indexOf("{"));

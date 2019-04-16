@@ -1,4 +1,4 @@
-package smells;
+package Smells;
 import files.SLClass;
 
 import java.io.*;
@@ -28,20 +28,20 @@ public class GodClasses {
         double avgGodScore = 0;
 
         for (SLClass clazz:classes) {
-            File file = new File("filepath" + clazz.getName());
+            File file = new File("filepath" + clazz.getClassName());
             int numLines = getNumOfFileLines(file);
 
-            int numMethods = clazz.getMethods().size();
+            int numMethods =  4;//clazz.getMethods().size();                   change in future
             avgGodScore += calculateGodScore(numLines,numMethods);
         }
 
         avgGodScore = avgGodScore/classes.size();
 
         for (SLClass clazz:classes) {
-            File file = new File("filepath" + clazz.getName());
+            File file = new File("filepath" + clazz.getClassName());
             int numLines = getNumOfFileLines(file);
 
-            int numMethods = clazz.getMethods().size();
+            int numMethods = 44; //clazz.getMethods().size();                   change in future
             double godScore = calculateGodScore(numLines,numMethods);
 
             if(godScore >= (2.5*avgGodScore)){

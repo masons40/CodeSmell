@@ -1,4 +1,4 @@
-package smells;
+package Smells;
 
 /**
  * Return hashmap of Switch Conditions -> Number Cases

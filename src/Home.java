@@ -49,7 +49,7 @@ public class Home extends HttpServlet {
 
         //classCreator.instantiateClass("Celsius", response);
         //response.getWriter().println(c.toString());
-        //response.sendRedirect("InfoPage.jsp");
+        response.sendRedirect("dashboard.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -1,15 +1,8 @@
 /**
  * Return hashmap of Switch Conditions -> Number Cases
  */
-<<<<<<< Updated upstream
-package smells;
-import files.SLClass;
-=======
-
 
 package Smells;
-
->>>>>>> Stashed changes
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,7 +11,11 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SwitchBlocks {
+import Smells.SwitchBlocksSmell;
+import files.SLClass;
+
+
+public class SwitchBlocks extends SmellDetector{
 
 	public SwitchBlocks(){
 	}

@@ -1,8 +1,8 @@
-package smells;
+package Smells;
 
 import files.SLClass;
-
-public class SwitchBlocksSmell extends SmellReport{
+import Smells.SmellReport;
+public class SwitchBlocksSmell extends SmellReport {
 
 	private String condition;
 	private int numCases;

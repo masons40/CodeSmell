@@ -65,8 +65,51 @@ public class MethodDetector {
 //    }
 
     //method takes in 2 lines and checks if they are a method declaration
-    /*
-    public static boolean isMethodDeclaration(String firstLine, String secondLine){
+
+        public static boolean isMethodDeclaration(String firstLine, String secondLine){
+            //create strings containing lines of the file without spaces
+            String firstLineWithoutSpaces = firstLine.replaceAll(" ", "");
+            firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\t","");
+            String secondLineWithoutSpaces = "";
+
+            if(secondLine!=null) {
+                secondLineWithoutSpaces = secondLine.replaceAll(" ", "");
+                secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\t","");
+            }
+
+            /*Case 1:
+             * (accessModifiers) (returnType/no returnType) (name)(parameters){
+             */
+            if(firstLineWithoutSpaces.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+(.+)\\(.*\\).*\\{")){
+                return true;
+            }
+            /*Case 2:
+             * (returnType) (name)(parameters){
+             */
+            else if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*.*\\s*\\{\\s*") && !firstLine.contains("else if")){
+                return true;
+            }
+            /*Case 3:
+             * (accessModifiers) (returnType/no returnType) (name)(parameters)
+             * {
+             */
+            else if(firstLineWithoutSpaces.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+(.+)\\(.*\\).*") && secondLineWithoutSpaces.startsWith("{")){
+                return true;
+            }
+            /*Case 4:
+             * (returnType) (name)(parameters)
+             * {
+             */
+            else if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*.*\\s*") && !firstLine.contains("else if") && secondLineWithoutSpaces.startsWith("{")){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+    //method takes in 2 lines and checks if they are a method declaration
+    public static boolean isConstructorDeclaration(String firstLine, String secondLine, String fileName){
         //create strings containing lines of the file without spaces
         String firstLineWithoutSpaces = firstLine.replaceAll(" ", "");
         firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\t","");
@@ -77,76 +120,30 @@ public class MethodDetector {
             secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\t","");
         }
 
-        /*Case 1:
-         * (accessModifiers) (returnType/no returnType) (name)(parameters){
-         */
-//        if(firstLineWithoutSpaces.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+(.+)\\(.*\\).*\\{")){
-//            return true;
-//        }
-//        /*Case 2:
-//         * (returnType) (name)(parameters){
-//         */
-//        else if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*.*\\s*\\{\\s*") && !firstLine.contains("else if")){
-//            return true;
-//        }
-//        /*Case 3:
-//         * (accessModifiers) (returnType/no returnType) (name)(parameters)
-//         * {
-//         */
-//        else if(firstLineWithoutSpaces.matches("(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)+(.+)\\(.*\\).*") && secondLineWithoutSpaces.startsWith("{")){
-//            return true;
-//        }
-//        /*Case 4:
-//         * (returnType) (name)(parameters)
-//         * {
-//         */
-//        else if(firstLine.matches("\\s*([a-zA-Z]+)\\s+([a-zA-Z]+)\\s*\\(.*\\)\\s*.*\\s*") && !firstLine.contains("else if") && secondLineWithoutSpaces.startsWith("{")){
-//            return true;
-//        }
-//        else {
-//            return false;
-//        }
-//    }
+        // name of the class which we will use to check if line is constructor declaration
+        String className = fileName.split("\\.")[0];
 
-//    //method takes in 2 lines and checks if they are a method declaration
-//    public static boolean isConstructorDeclaration(String firstLine, String secondLine, String fileName){
-//        //create strings containing lines of the file without spaces
-//        String firstLineWithoutSpaces = firstLine.replaceAll(" ", "");
-//        firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\t","");
-//        String secondLineWithoutSpaces = "";
-//
-//        if(secondLine!=null) {
-//            secondLineWithoutSpaces = secondLine.replaceAll(" ", "");
-//            secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\t","");
-//        }
-//
-//        // name of the class which we will use to check if line is constructor declaration
-//        String className = fileName.split("\\.")[0];
-//
-//        /*Case 1:
-//         * (constructorName)(parameters){
-//         */
-//        if(firstLineWithoutSpaces.matches("([a-zA-Z]+)\\(.*\\)\\{") && firstLineWithoutSpaces.split("\\(")[0].equals(className)){
-//            return true;
-//        }
-//        /*Case 2:
-//         * (constructorName)(parameters)
-//         * {
-//         */
-//        else if(firstLineWithoutSpaces.matches("([a-zA-Z]+)\\(.*\\)") && firstLineWithoutSpaces.split("\\(")[0].equals(className) && secondLineWithoutSpaces.startsWith("{")){
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
-//    }
-//
+        /*Case 1:
+         * (constructorName)(parameters){
+         */
+        if(firstLineWithoutSpaces.matches("([a-zA-Z]+)\\(.*\\)\\{") && firstLineWithoutSpaces.split("\\(")[0].equals(className)){
+            return true;
+        }
+        /*Case 2:
+         * (constructorName)(parameters)
+         * {
+         */
+        else if(firstLineWithoutSpaces.matches("([a-zA-Z]+)\\(.*\\)") && firstLineWithoutSpaces.split("\\(")[0].equals(className) && secondLineWithoutSpaces.startsWith("{")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     //method finds the name of a method using a string array of each part of the method declaration split at " "
-<<<<<<< Updated upstream
-    private static String findMethodName(String[] firstLineSplit){
-=======
-    public static String findMethodName(ArrayList<String> firstLineSplit){
->>>>>>> Stashed changes
+
+    private static String findMethodName(ArrayList<String> firstLineSplit){
         String name = "";
         for(String s: firstLineSplit) {
             /*if the string contains "(" and it doesn't start with the bracket the name
@@ -164,11 +161,8 @@ public class MethodDetector {
     }
 
     //method finds the access modifiers of a method using a string array of each part of the method declaration split at " "
-<<<<<<< Updated upstream
-    private static String findAccessModifier(String[] firstLineSplit){
-=======
-    public static String findAccessModifier(ArrayList<String> firstLineSplit){
->>>>>>> Stashed changes
+
+    private static String findAccessModifier(ArrayList<String> firstLineSplit){
         String accessor = "";
         //if string matches one of the access modifiers add this modifier to the string
         for(String s: firstLineSplit) {
@@ -179,12 +173,8 @@ public class MethodDetector {
         return accessor;
     }
 
-    //method finds the return type of a method using a string array of each part of the method declaration split at " "
-<<<<<<< Updated upstream
-    private static String findReturnType(String[] firstLineSplit, String name){
-=======
     public static String findReturnType(ArrayList<String> firstLineSplit, String name){
->>>>>>> Stashed changes
+
         String returnType = "";
 
         for(int i = 0; i<firstLineSplit.size(); i++) {
@@ -214,10 +204,6 @@ public class MethodDetector {
         return returnType;
     }
 
-<<<<<<< Updated upstream
-    //method finds the access parameters of a method using the
-=======
->>>>>>> Stashed changes
     private static ArrayList<String> findParameters(String firstline){
         ArrayList<String> parameters = new ArrayList<String>();
         String allParams = "";

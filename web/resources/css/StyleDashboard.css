@@ -1,0 +1,274 @@
+
+*{
+    margin:0;
+    outline:none;
+    padding:0;
+}
+
+body{
+    width:100vw;
+    height: 100vh;
+    display: inline-grid;
+    grid-template-columns: 15% 85%;
+    background: linear-gradient(#194785,#ccf4fe);
+}
+a{
+    cursor: pointer;
+    text-decoration: none;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+#bg-image{
+    position: fixed;
+    z-index: -1;
+    width:60%;
+    bottom:0;
+    right:0;
+}
+
+#navigation{
+    width:100%;
+    background-color: white;
+}
+.navbar-a {
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    width:80%;
+    margin: 0 auto;
+}
+.navbar-a h2{
+    font-weight: 200;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Rajdhani', sans-serif;
+    padding: 5px;
+    width: 70%;
+    border: 2px solid black;
+    margin: 0 auto;
+}
+#navigation-box{
+    width:100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#navigation-box a{
+    color:black;
+    background-color: white;
+    margin:10px 0;
+    font-size:13px;
+}
+
+#navigation-box a h3{
+    padding: 3px;
+    background-color: white;
+    margin: 10px auto;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+}
+#god-class:hover{
+    border-left:2px solid #ed1835;
+}
+#duplicated-code:hover{
+    border-left:2px solid #efe619;
+}
+#message-chaining:hover{
+    border-left:2px solid #f6710f;
+}
+#feature-envy:hover{
+    border-left:2px solid #01bc7d;
+}
+#unused-code:hover{
+    border-left:2px solid #3ad6d4;
+}
+#over-nesting:hover{
+    border-left:2px solid #3645a9;
+}
+#unnamed-literals:hover{
+    border-left:2px solid #c459cf;
+}
+#primitive-obsession:hover{
+    border-left:2px solid #c459cf;
+}
+
+.menu-item::after{
+    background: white;
+}
+
+
+#main-content{
+    width:100%;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.item-box{
+    width:90%;
+    position: relative;
+    text-transform: uppercase;
+    margin: 20px auto;
+}
+
+.title-box{
+    position: relative;
+    padding: 5px;
+    margin: 10px 0;
+    border: 2px solid #ffffff;
+}
+.title-box h2{
+    padding: 0 40px;
+    font-family: 'Rajdhani', sans-serif;
+    z-index: 4;
+    font-weight: 300;
+    color: white;
+}
+ 
+.content{
+    width:100%;
+    background-color: white;
+     display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+    border-radius: 5px;
+}
+
+.files-found{
+    padding: 10px;
+    width: 100%;
+    border-radius: 0 0 5px 5px;
+    background-color: #f7f7f7;
+}
+.files-found h2{
+    font-size: 25px;
+    color: darkgrey;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    border-bottom: 1px solid #e9e9e9;
+}
+.text-box-layout{
+    width:100%;
+    margin: 10px 0;
+    display: inline-grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(5,1fr);
+}
+
+.box-info{
+    background-color: #f2f2f2;
+    border: 1px solid #8080802b;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 0px 0px 11px -6px #3f3f3f;
+}
+
+.text-info{
+    text-align: center;
+    color:white;
+    font-size: 1.1em;
+    line-height: 25px;
+}
+
+.text-info h3{
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1em;
+}
+
+.text-info:nth-child(1){
+    background-color: #f9b084;
+}
+
+.text-info:nth-child(2){
+    background-color:#f4c78e;
+}
+
+.text-info:nth-child(3){
+    background-color:#a14ea0;
+}
+
+.text-info:nth-child(4){
+    background-color:#4a2f80;
+}
+
+.text-info:nth-child(5){
+    background-color:#2a77bb;
+}
+
+.area-pie-display{
+    width:100%;
+    grid-gap:5px;
+}
+
+.area-chart{
+    width:70%;
+    height:auto;
+}
+
+.area-chart div{
+    width:100%;
+    height:300px;
+}
+.pie-chart{
+    width:30%;
+    height:300px;
+    display: grid;
+    grid-template-rows: 10fr 1fr;
+    background-color: white;
+}
+
+.pie-chart canvas{
+    width:100%;
+    margin: auto 0;
+}
+
+
+.piechart-toggle-data{
+    width:100%;
+    text-align: center;
+}
+
+.piechart-toggle-data h3{
+    padding: 3px;
+    font-size: 1em;
+    font-weight:300;
+    text-align: center;
+}
+
+.piechart-toggle-data button{
+    width:40%;
+    margin: 10px auto;
+    padding: 5px;
+    border:none;
+    font-family: 'Rajdhani', sans-serif;
+    background: linear-gradient(45deg,#ad5ca4,#2982c6);
+    border-radius: 50px;
+    text-align: center;
+    cursor:pointer;
+    color:white;
+}
+
+
+
+
