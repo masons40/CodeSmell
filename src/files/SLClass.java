@@ -1,45 +1,99 @@
 package files;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class SLClass {
 
-    String name = "";
-    ArrayList<SLMethod> methods = new ArrayList<>();
-    ArrayList<SLVariable> variables = new ArrayList<>();
-    ArrayList<SLClass> subClasses = new ArrayList<>();
-    SLClass parentClass = null;
+    private String modifier = "";
+    private String className="", extendsClassName="";
+    private ArrayList<String> interfaces = new ArrayList<>();
+    private HashMap<String, Boolean> classBools = new HashMap<>();
+    private ArrayList<SLClass> sublclasses = new ArrayList<>();
+    private Boolean subclass = false;
 
-    public SLClass(String name, ArrayList<SLMethod> methods, ArrayList<SLVariable> variables, ArrayList<SLClass> subClasses, SLClass parentClass){
-        this.name = name;
-        this.methods = methods;
-        this.variables = variables;
-        this.subClasses = subClasses;
-        this.parentClass = parentClass;
+    public SLClass(){
+        classBools.put("implementsInterfaces",Boolean.FALSE);
+        classBools.put("extendsClass",Boolean.FALSE);
+        classBools.put("containsInnerClass",Boolean.FALSE);
+        classBools.put("final",Boolean.FALSE);
+        classBools.put("abstract",Boolean.FALSE);
+        classBools.put("strictfp",Boolean.FALSE);
+        classBools.put("public",Boolean.FALSE);
+        classBools.put("private",Boolean.FALSE);
+        classBools.put("protected",Boolean.FALSE);
+        classBools.put("static",Boolean.FALSE);
     }
 
-    public String getName() {
-        return name;
+    public ArrayList getSubClasses(){
+        return sublclasses;
     }
 
-    public ArrayList<SLMethod> getMethods() {
-        return methods;
+    public boolean getClassBools(String boolName){
+        return classBools.get(boolName);
     }
 
-    public ArrayList<SLVariable> getVariables() {
-        return variables;
+    public String getClassModfier(){
+        return modifier;
     }
 
-    public ArrayList<SLClass> getSubClasses() {
-        return subClasses;
+    public String getClassName(){
+        return className;
     }
 
-    public SLClass getParentClass() {
-        return parentClass;
+    public String getExtendsName(){
+        return extendsClassName;
     }
 
-    public boolean hasParentClass(){
-        return parentClass != null;
+    public ArrayList getInterfaceNames(){
+        return interfaces;
+    }
+
+    public void addSubClasses(){
+        sublclasses.add(new SLClass());
+    }
+
+    public void setClassBoolToTrue(String boolName){
+        classBools.put(boolName, true);
+    }
+
+    public void setClassModfier(String m){
+        modifier = m;
+        classBools.put(m, true);
+    }
+
+    public void setClassName(String s){
+        if(s.contains("{")){
+            className = s.substring(0, s.indexOf("{"));
+        }else {
+            className = s;
+        }
+    }
+
+    public void  setExtendsName(String s){
+        extendsClassName = s;classBools.put("extendsClass", true);
+    }
+
+    public void setImplementsName(String s){
+        if(s.contains(",")){
+            interfaces.add(s.substring(0, s.indexOf(",")));
+        }else {
+            interfaces.add(s);
+        }
+        classBools.put("implementsInterfaces", true);
+    }
+
+    public String toString(){
+        return   modifier +" "+ className +" "+extendsClassName+
+                "\n" + interfaces.toString() + "\n"+ classBools.toString() + "\n" + sublclasses.toString();
+    }
+
+    public void setClass(){
+        subclass=true;
+    }
+
+    public Boolean getSetClass(){
+        return subclass;
     }
 
 }

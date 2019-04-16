@@ -1,4 +1,4 @@
-package FolderManagement;
+package Management;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -16,26 +16,29 @@ import static org.apache.commons.io.FileUtils.copyFileToDirectory;
 
 public class FileTransfer {
 
-    private String sav_dir="files";
     private String java_dir="java";
-    private String class_dir="class";
 
-    private ArrayList<String> filenames = new ArrayList<>();
+    private ArrayList<String> javaFileNames = new ArrayList<>();
 
-    private Boolean javaFiles=false, classFiles=false;
-
-    private String mainFilePath, javaFilePath, classFilePath, extension, fileName, mainName;
+    private String mainFilePath;
+    private String javaFilePath;
+    private String companyFilePath;
+    private String extension;
+    private String fileName;
+    private String mainName;
 
     private HttpServletRequest request;
 
     public FileTransfer(HttpServletRequest request) throws IOException, ServletException {
         this.request = request;
         extension = request.getParameter("selection-value");
+        String companyName = request.getParameter("Cname");
+        String sav_dir = "files";
         mainFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir;
-        javaFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + java_dir;
-        classFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + class_dir;
+        javaFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + companyName + File.separator + java_dir;
+        companyFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + companyName;
 
-        fileCreator(); //Create file objects from paths
+        fileCreator();
         fileTransferring();
         deleteDataFolder(new File(mainFilePath+File.separator + fileName));
         File[] zipFile = new File(mainFilePath+File.separator+mainName).listFiles();
@@ -49,16 +52,17 @@ public class FileTransfer {
 
     private void fileCreator(){
         File file = new File(mainFilePath);
+        File fileCompany = new File(companyFilePath);
         File fileJava = new File(javaFilePath);
-        File fileClass = new File(classFilePath);
+
         if(!file.exists()) {
             file.mkdir();
         }
+        if(!fileCompany.exists()) {
+            fileCompany.mkdir();
+        }
         if(!fileJava.exists()) {
             fileJava.mkdir();
-        }
-        if(!fileClass.exists()) {
-            fileClass.mkdir();
         }
     }
 
@@ -79,7 +83,7 @@ public class FileTransfer {
 
 
     private void fileParsing(HttpServletRequest request, String filePath) throws IOException, ServletException {
-        javaFiles=true;
+
         List<Part> fileParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList()); // Retrieves <input type="file" name="file" multiple="true">
         for (Part filePart : fileParts) {
             fileName = getFileName(filePart);
@@ -115,7 +119,7 @@ public class FileTransfer {
 
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath.toAbsolutePath().toString()))) {
             byte[] bytesIn = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = zipInputStream.read(bytesIn)) != -1) {
                 bos.write(bytesIn, 0, len);
             }
@@ -137,7 +141,7 @@ public class FileTransfer {
         folder.delete();
     }
 
-    private void showFiles(File[] files) throws IOException {
+    private void showFiles(File[] files) {
         for (File file : files) {
             if (file.isDirectory()) {
                 File[] nullTestFiles = file.listFiles();
@@ -146,12 +150,7 @@ public class FileTransfer {
                 }
             } else {
                 if(file.toString().contains(".java")){
-                    javaFiles=true;
                     transferring(file, javaFilePath);
-                    addToFileNames(file.toString());
-                }else if(file.toString().contains(".class")){
-                    classFiles=true;
-                    transferring(file, classFilePath);
                     addToFileNames(file.toString());
                 }
             }
@@ -170,29 +169,22 @@ public class FileTransfer {
         if(s.contains(File.separator)){
             s = s.substring(s.lastIndexOf(File.separator)+1, s.indexOf("."));
         }
-
-        if(!filenames.contains(s)){
-            filenames.add(s);
+        if(!javaFileNames.contains(s)){
+            javaFileNames.add(s);
         }
+
     }
 
-    public ArrayList<String> getfileNames(){
-        return filenames;
+    public ArrayList<String> getJavaFileNames(){
+        return javaFileNames;
     }
 
     public String getJavaFilePath(){
         return javaFilePath;
     }
 
-    public String getClassFilePath(){
-        return classFilePath;
+    public String getCompanyFilePath(){
+        return companyFilePath;
     }
 
-    public Boolean getBools(int i){
-        if(i==1){
-            return javaFiles;
-        }else{
-            return classFiles;
-        }
-    }
 }

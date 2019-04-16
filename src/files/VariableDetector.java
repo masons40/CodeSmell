@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class VariableDetector {
 
-    String dataTypeRegex = String.format("(byte|short|int|long|float|double|boolean|char|String)");
-    String accessorsRegex = String.format("(public|private|protected|static|final|native|synchronized|abstract|transient)");
+    private String dataTypeRegex = "(byte|short|int|long|float|double|boolean|char|String)";
+    private String accessorsRegex = "(public|private|protected|static|final|native|synchronized|abstract|transient)";
 
     public void checkForVariables(String directoryAddress) throws Exception {
         File dir = new File(directoryAddress);

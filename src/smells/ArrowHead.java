@@ -1,6 +1,4 @@
-//Static Class to detect maximum depth of conditional blocks for each method
-
-package smells;
+package  Smells;
 
 import files.SLClass;
 import java.io.BufferedReader;

@@ -1,6 +1,6 @@
-
-
-import FolderManagement.FileTransfer;
+import Management.ClassManagement;
+import Management.FileTransfer;
+import files.InfoExtraction;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,22 +14,41 @@ import java.util.ArrayList;
 public class Home extends HttpServlet {
 
     private FileTransfer fileTransfer;
-    private ArrayList<String> fileNames;
+    private ClassManagement classCreator;
+    private ArrayList<String> javaFileNames;
 
-    private Boolean javaFilesSubmitted=false, classFilesSubmitted=false;
-
-    private String javaFilePath="",classFilePath="";
+    private String javaFilePath="",companyFilePath="";
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         fileTransfer = new FileTransfer(request);
-        fileNames = fileTransfer.getfileNames();
-        response.getWriter().println("Files found:");
-        for(String s: fileNames){
-            response.getWriter().println(s);
-        }
-        javaFilesSubmitted = fileTransfer.getBools(1);
-        classFilesSubmitted = fileTransfer.getBools(0);
+        javaFileNames = fileTransfer.getJavaFileNames();
         javaFilePath = fileTransfer.getJavaFilePath();
-        classFilePath = fileTransfer.getClassFilePath();
+        companyFilePath = fileTransfer.getCompanyFilePath();
+        classCreator = new ClassManagement(javaFilePath,javaFileNames);
+        //classCreator.ClassCreation();
+        InfoExtraction cd = new InfoExtraction();
+
+        BufferedReader br = new BufferedReader(new FileReader(javaFilePath+File.separator+"Celsius.java"));
+
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            cd.checkIfClassLine(line);
+        }
+
+        response.getWriter().println();
+
+
+        /*
+        Class c = null;
+        try {
+            c = Class.forName("nosejob.Celsius");
+        } catch (ClassNotFoundException e) {
+            response.getWriter().println(e);
+        }*/
+
+
+        //classCreator.instantiateClass("Celsius", response);
+        //response.getWriter().println(c.toString());
         //response.sendRedirect("InfoPage.jsp");
     }
 
