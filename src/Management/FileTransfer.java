@@ -31,7 +31,7 @@ public class FileTransfer {
 
     public FileTransfer(HttpServletRequest request) throws IOException, ServletException {
         this.request = request;
-        extension = "zip";
+        extension = "java";
         String companyName = request.getParameter("Cname");
         String sav_dir = "files";
         mainFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir;

@@ -2,6 +2,7 @@ package files;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +20,13 @@ public class InfoExtraction {
     private String previousLine = "";
     private Stack pushDownClassAutomata = new Stack();
     private MethodDetector md = new MethodDetector();
+    private VariableDetector vd = new VariableDetector();
     HttpServletResponse response;
+    PrintWriter pw;
 
-    public InfoExtraction(HttpServletResponse response){
+    public InfoExtraction(HttpServletResponse response) throws IOException {
         this.response = response;
+        pw = response.getWriter();
         classAccessTypes.add("final");
         classAccessTypes.add("abstract");
         classAccessTypes.add("strictfp");
@@ -45,21 +49,24 @@ public class InfoExtraction {
         otherKeyWords.add("switch");
     }
 
-    public void checkIfClassLine(String line){
+    public void checkIfClassLine(String line) throws Exception {
 
         if(classDetection(line)){
+            pw.println("Class Line "+line +" or "+previousLine);
             if(previousLine.contains("class")){
                 extractClassInfo(previousLine);
             }else{
                 extractClassInfo(line);
             }
         }else if(methodDetection(line)){
+            pw.println("method Line "+line +" or "+previousLine);
             if(LineCheck(line)){
                 md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), line);
             }else{
                 md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), previousLine);
             }
         }else if(interfaceDetection(line)){
+            pw.println("Interface Line "+line +" or "+previousLine);
             if(line.contains("interface")){
                 ArrayList<String> temp = lineStrip(Arrays.asList(line.split(" ")));
                 String name = temp.get(temp.indexOf("interface")+1);
@@ -70,39 +77,24 @@ public class InfoExtraction {
                 ClassDetailsModify(name);
             }
         }else if(enumDetection(line)){
-
+            pw.println("Enum Line "+line +" or "+previousLine);
         }else if(otherLineDetection(line)){
-
+            pw.println("variable Line "+line +" or "+previousLine);
+            vd.checkForVariables(line);
         }
 
 
 
         if(line.contains("}") && pushDownClassAutomata.peek()=="M"){
-            System.out.println("->M");
-            for(SLMethod m:  md.getMethods()){
-                System.out.println();
-                System.out.println(m.getAccessor());
-                System.out.println(m.getReturnType());
-                System.out.println(m.getName());
-                System.out.println(m.getParameters());
-                System.out.println();
-            }
-            System.out.println();
             pushDownClassAutomata.pop();
         }else if(line.contains("}") && pushDownClassAutomata.peek()=="C"){
-            System.out.println("->C");
-            System.out.println(classes.get(0).toString());
             currentIndex--;
             pushDownClassAutomata.pop();
         }else if(line.contains("}") && pushDownClassAutomata.peek()=="O"){
-            System.out.println("->O");
             pushDownClassAutomata.pop();
         }else if(line.contains("}") && pushDownClassAutomata.peek()=="I"){
-            System.out.println("->I");
             pushDownClassAutomata.pop();
-        }
-        else if(line.contains("}") && pushDownClassAutomata.peek()=="E"){
-            System.out.println("->E");
+        }else if(line.contains("}") && pushDownClassAutomata.peek()=="E"){
             pushDownClassAutomata.pop();
         }
 
@@ -235,6 +227,9 @@ public class InfoExtraction {
         response.getWriter().println(classes.toString());
         for(SLMethod m: md.getMethods()){
             response.getWriter().println(m.toString());
+        }
+        for(SLVariable v: vd.getVariableList()){
+            response.getWriter().println(v.toString());
         }
     }
 

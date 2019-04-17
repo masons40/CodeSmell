@@ -11,6 +11,7 @@ public class SLVariable {
         this.value = value;
     }
 
+    //are constants found?
     public String getScope() {
         return scope;
     }
@@ -25,5 +26,9 @@ public class SLVariable {
 
     public String getValue() {
         return value;
+    }
+
+    public  String toString(){
+        return scope+" "+type+" "+name+" "+value;
     }
 }

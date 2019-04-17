@@ -29,14 +29,18 @@ public class Home extends HttpServlet {
         InfoExtraction cd = new InfoExtraction(response);
         BufferedReader br;
         for(String s : javaFileNames){
-            br = new BufferedReader(new FileReader(javaFilePath+File.separator+s+".java"));
+            br = new BufferedReader(new FileReader(javaFilePath+File.separator+s));
 
             String line;
 
             while ((line = br.readLine()) != null) {
-                cd.checkIfClassLine(line);
+                try {
+                    cd.checkIfClassLine(line);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            cd.showDetails();
+            //cd.showDetails();
             cd.ClearDetails();
             response.getWriter().println();
             response.getWriter().println();
