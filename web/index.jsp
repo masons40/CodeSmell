@@ -1,4 +1,8 @@
-
+<%
+    response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+    response.setHeader("Pragma","no-cache"); //HTTP 1.0
+    response.setDateHeader ("Expires", 0);
+%>
 <!DOCTYPE html>
 <html>
 
@@ -11,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/StyleRetryAgain.css">
 </head>
 <body id="home">
-    <img src="resources/images//bgimage.png" id="bg-image"/>
+    <img src="resources/images/bgimage.png" id="bg-image"/>
     <a href="#home"><i class="fas fa-arrow-circle-up" id="up-arrow"></i></a>
     <header>
         <div class="navbar">

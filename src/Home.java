@@ -19,23 +19,30 @@ public class Home extends HttpServlet {
 
     private String javaFilePath="",companyFilePath="";
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         fileTransfer = new FileTransfer(request);
         javaFileNames = fileTransfer.getJavaFileNames();
         javaFilePath = fileTransfer.getJavaFilePath();
         companyFilePath = fileTransfer.getCompanyFilePath();
         classCreator = new ClassManagement(javaFilePath,javaFileNames);
         //classCreator.ClassCreation();
-        InfoExtraction cd = new InfoExtraction();
+        InfoExtraction cd = new InfoExtraction(response);
+        BufferedReader br;
+        for(String s : javaFileNames){
+            br = new BufferedReader(new FileReader(javaFilePath+File.separator+s+".java"));
 
-        BufferedReader br = new BufferedReader(new FileReader(javaFilePath+File.separator+"Celsius.java"));
+            String line;
 
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            cd.checkIfClassLine(line);
+            while ((line = br.readLine()) != null) {
+                cd.checkIfClassLine(line);
+            }
+            cd.showDetails();
+            cd.ClearDetails();
+            response.getWriter().println();
+            response.getWriter().println();
+            response.getWriter().println();
         }
 
-        response.getWriter().println();
 
 
         /*
@@ -49,7 +56,7 @@ public class Home extends HttpServlet {
 
         //classCreator.instantiateClass("Celsius", response);
         //response.getWriter().println(c.toString());
-        response.sendRedirect("dashboard.jsp");
+        //response.sendRedirect("dashboard.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

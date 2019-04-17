@@ -222,6 +222,13 @@ public class MethodDetector {
         return parameters;
     }
 
+    public void clearMethodDetector(){
+        methods.clear();
+        name = ""; //string will store name of the method
+        accessModifier = ""; //string will store access modifier of the method
+        returnType = ""; //string will store return type of the method
+        parameters.clear(); //parameters stored as an array list of strings
+    }
     public ArrayList<SLMethod> getMethods(){
         return methods;
     }

@@ -1,5 +1,7 @@
 package files;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +18,11 @@ public class InfoExtraction {
     private String ext="extends", imp="implements";
     private String previousLine = "";
     private Stack pushDownClassAutomata = new Stack();
+    private MethodDetector md = new MethodDetector();
+    HttpServletResponse response;
 
-    public InfoExtraction(){
+    public InfoExtraction(HttpServletResponse response){
+        this.response = response;
         classAccessTypes.add("final");
         classAccessTypes.add("abstract");
         classAccessTypes.add("strictfp");
@@ -48,9 +53,12 @@ public class InfoExtraction {
             }else{
                 extractClassInfo(line);
             }
-
         }else if(methodDetection(line)){
-
+            if(LineCheck(line)){
+                md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), line);
+            }else{
+                md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), previousLine);
+            }
         }else if(interfaceDetection(line)){
             if(line.contains("interface")){
                 ArrayList<String> temp = lineStrip(Arrays.asList(line.split(" ")));
@@ -66,11 +74,24 @@ public class InfoExtraction {
         }else if(otherLineDetection(line)){
 
         }
+
+
+
         if(line.contains("}") && pushDownClassAutomata.peek()=="M"){
             System.out.println("->M");
+            for(SLMethod m:  md.getMethods()){
+                System.out.println();
+                System.out.println(m.getAccessor());
+                System.out.println(m.getReturnType());
+                System.out.println(m.getName());
+                System.out.println(m.getParameters());
+                System.out.println();
+            }
+            System.out.println();
             pushDownClassAutomata.pop();
         }else if(line.contains("}") && pushDownClassAutomata.peek()=="C"){
             System.out.println("->C");
+            System.out.println(classes.get(0).toString());
             currentIndex--;
             pushDownClassAutomata.pop();
         }else if(line.contains("}") && pushDownClassAutomata.peek()=="O"){
@@ -165,7 +186,7 @@ public class InfoExtraction {
         for(String s: classLineElements){
             if(classAccessTypes.contains(s)){
                 bef.setClassModfier(s);
-                classLineElements.remove(s);
+                //classLineElements.remove(s);
                 bef.setClassBoolToTrue(s);
                 break;
             }
@@ -197,9 +218,24 @@ public class InfoExtraction {
     }
 
     private void ClassDetailsModify(String interfaceName){
-
         classes.get(currentIndex).setImplementsName(interfaceName);
     }
 
+
+    public void ClearDetails(){
+        classes.clear();
+        currentIndex=-1;
+        previousLine = "";
+        pushDownClassAutomata.removeAllElements();
+        md.clearMethodDetector();
+    }
+
+
+    public void showDetails() throws IOException {
+        response.getWriter().println(classes.toString());
+        for(SLMethod m: md.getMethods()){
+            response.getWriter().println(m.toString());
+        }
+    }
 
 }
