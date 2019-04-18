@@ -10,11 +10,12 @@ public class MethodDetector {
     String name = ""; //string will store name of the method
     String accessModifier = ""; //string will store access modifier of the method
     String returnType = ""; //string will store return type of the method
-    ArrayList<String> parameters = new ArrayList<String>(); //parameters stored as an array list of strings
+    ArrayList<String> parameters = new ArrayList<>(); //parameters stored as an array list of strings
 
     //Method takes in a file reads through it and returns an arrayList of methods
 
     public void methodCreator(ArrayList<String> firstLineSplit, String firstLine){
+        while (firstLineSplit.remove(""));
         name = findMethodName(firstLineSplit);
         accessModifier = findAccessModifier(firstLineSplit);
         returnType = findReturnType(firstLineSplit,name);
@@ -68,13 +69,13 @@ public class MethodDetector {
 
         public static boolean isMethodDeclaration(String firstLine, String secondLine){
             //create strings containing lines of the file without spaces
-            String firstLineWithoutSpaces = firstLine.replaceAll(" ", "");
-            firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\t","");
+            String firstLineWithoutSpaces = firstLine.replaceAll("\\s", "");
+            firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\\t","");
             String secondLineWithoutSpaces = "";
 
             if(secondLine!=null) {
                 secondLineWithoutSpaces = secondLine.replaceAll(" ", "");
-                secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\t","");
+                secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\\t","");
             }
 
             /*Case 1:

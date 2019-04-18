@@ -40,7 +40,7 @@ public class Home extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-            //cd.showDetails();
+            cd.showDetails();
             cd.ClearDetails();
             response.getWriter().println();
             response.getWriter().println();
