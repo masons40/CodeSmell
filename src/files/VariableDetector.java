@@ -2,21 +2,25 @@ package files;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VariableDetector {
 
     private String dataTypeRegex = "(byte|short|int|long|float|double|boolean|char|String)";
     private String accessorsRegex = "(public|private|protected|static|final|native|synchronized|abstract|transient)";
+    HashMap<String, Boolean> variableMap = new HashMap<>();
 
     private ArrayList<SLVariable> variableList = new ArrayList<>();
 
-    public void checkForVariables(String line) throws Exception {
+    public void checkForVariables(String line) {
         String[] lineSplit =line.split("\\s+");
 
         if (isVariable(line)){
             variableList.add(new SLVariable(findScope(lineSplit), findType(lineSplit),findName(lineSplit),findValue(lineSplit)));
+            variableMap.put(findName(lineSplit), false);
         }
 
+        isUsed(line);
     }
 
     private boolean isVariable(String line) {
@@ -27,7 +31,7 @@ public class VariableDetector {
             if (line.contains("=")||line.contains(";")) {
                 return true;
             } else {
-                return false; //is a poorly declared method without the scope defined (smelly!!!)
+                return false; //is a poorly declared method without the scope defined
             }
 
         } else if (line.matches(".*=new.*")) {
@@ -93,6 +97,20 @@ public class VariableDetector {
     private String findValue(String[] lineSplit) {
         String value = "";
         return value;
+    }
+
+    public boolean isUsed(String lineSplit) {
+        String[] lineSplitUp = lineSplit.split("\\s+");
+        String lineNoSpaces = lineSplit.replaceAll("\\s+", "");
+
+        for (String key: variableMap.keySet()) {
+            if (lineNoSpaces.matches(".*([^[a-zA-Z]]|\\s*)"+key+"[^[a-zA-Z0-9]].*") &&
+                    (!isVariable(lineSplit) || !key.equals(findName(lineSplitUp)))) {
+                variableMap.put(key, true);
+            }
+        }
+
+        return false;
     }
 
     public ArrayList<SLVariable> getVariableList(){
