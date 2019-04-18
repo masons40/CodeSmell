@@ -10,7 +10,7 @@ public class MethodDetector {
     String name = ""; //string will store name of the method
     String accessModifier = ""; //string will store access modifier of the method
     String returnType = ""; //string will store return type of the method
-    ArrayList<String> parameters = new ArrayList<String>(); //parameters stored as an array list of strings
+    ArrayList<String> parameters = new ArrayList<>(); //parameters stored as an array list of strings
 
     //Method takes in a file reads through it and returns an arrayList of methods
 
