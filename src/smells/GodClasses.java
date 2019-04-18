@@ -1,4 +1,4 @@
-package Smells;
+package smells;
 import files.SLClass;
 
 import java.io.*;

@@ -68,13 +68,13 @@ public class MethodDetector {
 
         public static boolean isMethodDeclaration(String firstLine, String secondLine){
             //create strings containing lines of the file without spaces
-            String firstLineWithoutSpaces = firstLine.replaceAll(" ", "");
-            firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\t","");
+            String firstLineWithoutSpaces = firstLine.replaceAll("\\s", "");
+            firstLineWithoutSpaces = firstLineWithoutSpaces.replaceAll("\\t","");
             String secondLineWithoutSpaces = "";
 
             if(secondLine!=null) {
                 secondLineWithoutSpaces = secondLine.replaceAll(" ", "");
-                secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\t","");
+                secondLineWithoutSpaces = secondLineWithoutSpaces.replaceAll("\\t","");
             }
 
             /*Case 1:
