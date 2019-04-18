@@ -2,13 +2,12 @@ package files;
 
 public class SLVariable {
 
-    private String scope = "",type="", name="", value="";
+    private String scope = "",type="", name="";
 
-    public SLVariable(String scope, String type, String name, String value) {
+    public SLVariable(String scope, String type, String name) {
         this.scope = scope;
         this.type = type;
         this.name = name;
-        this.value = value;
     }
 
     //are constants found?
@@ -24,11 +23,8 @@ public class SLVariable {
         return name;
     }
 
-    public String getValue() {
-        return value;
-    }
 
     public  String toString(){
-        return scope+" "+type+" "+name+" "+value;
+        return scope+" "+type+" "+name+" ";
     }
 }
