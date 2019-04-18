@@ -15,6 +15,7 @@ public class MethodDetector {
     //Method takes in a file reads through it and returns an arrayList of methods
 
     public void methodCreator(ArrayList<String> firstLineSplit, String firstLine){
+        while (firstLineSplit.remove(""));
         name = findMethodName(firstLineSplit);
         accessModifier = findAccessModifier(firstLineSplit);
         returnType = findReturnType(firstLineSplit,name);
