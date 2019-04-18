@@ -61,9 +61,9 @@ public class InfoExtraction {
         }else if(methodDetection(line)){
             pw.println("method Line "+line +" or "+previousLine);
             if(LineCheck(line)){
-                md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), line);
+                md.methodCreator(lineStrip(Arrays.asList(line.split("\\s+|\\t+"))), line);
             }else{
-                md.methodCreator(lineStrip(Arrays.asList(line.split(" "))), previousLine);
+                md.methodCreator(lineStrip(Arrays.asList(line.split("\\s+|\\t+"))), previousLine);
             }
         }else if(interfaceDetection(line)){
             pw.println("Interface Line "+line +" or "+previousLine);
