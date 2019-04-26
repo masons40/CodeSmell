@@ -2,7 +2,7 @@
  * Abstract class for all smell detecting classes
  */
 
-package Smells;
+package smells;
 
 import files.SLClass;
 

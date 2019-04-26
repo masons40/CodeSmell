@@ -2,7 +2,7 @@
 	Abstract class for what is returned by each smell detector
  */
 
-package Smells;
+package smells;
 
 import files.SLClass;
 import java.io.File;

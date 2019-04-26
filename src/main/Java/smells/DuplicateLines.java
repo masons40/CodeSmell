@@ -1,4 +1,4 @@
-package Smells;
+package smells;
 
 import java.io.*;
 

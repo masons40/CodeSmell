@@ -2,7 +2,7 @@
  * Return hashmap of Switch Conditions -> Number Cases
  */
 
-package Smells;
+package smells;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,7 +11,6 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Smells.SwitchBlocksSmell;
 import files.SLClass;
 
 

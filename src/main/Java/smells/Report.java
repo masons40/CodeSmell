@@ -1,4 +1,4 @@
-package Smells;
+package smells;
 
 public class Report {
 

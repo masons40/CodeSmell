@@ -97,7 +97,8 @@ public class SniffingLinesServer extends HttpServlet {
         //todo () add smellls
 
         for(SLFile file: files){
-        
+
+
         }
 
         /*response.getWriter().println();
