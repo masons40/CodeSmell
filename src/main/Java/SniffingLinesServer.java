@@ -18,7 +18,6 @@ import java.util.List;
 @MultipartConfig
 @WebServlet("/SniffingLinesServer")
 public class SniffingLinesServer extends HttpServlet {
-
     private FileTransfer fileTransfer;
     private ArrayList<String> javaFileNames;
     private String javaFilePath="",companyFilePath="";
@@ -32,16 +31,18 @@ public class SniffingLinesServer extends HttpServlet {
         //companyFilePath = fileTransfer.getCompanyFilePath();
         DataCollection dc = new DataCollection();
 
-        ArrayList<SLVariable> variables = new ArrayList<>();
-        ArrayList<SLMethod> methods = new ArrayList<>();
-        ArrayList<SLClass> classes = new ArrayList<>();
-        ArrayList<SLInterface> interfaces = new ArrayList<>();
-        ArrayList<SLEnum> enums = new ArrayList<>();
+        ArrayList<SLFile> files = new ArrayList<>();
 
 
         InputStream in = null;
         CompilationUnit cu = null;
         for(String s : javaFileNames) {
+
+            ArrayList<SLVariable> variables = new ArrayList<>();
+            ArrayList<SLMethod> methods = new ArrayList<>();
+            ArrayList<SLClass> classes = new ArrayList<>();
+            ArrayList<SLInterface> interfaces = new ArrayList<>();
+            ArrayList<SLEnum> enums = new ArrayList<>();
 
             try
             {
@@ -54,28 +55,22 @@ public class SniffingLinesServer extends HttpServlet {
                 dc.variableDetection(cu);
                 dc.methodDetection(cu);
 
-            }finally
-            {
-                in.close();
+            }catch(Exception e){
+                response.getWriter().println(e);
             }
+            response.getWriter().println();
+            response.getWriter().println();
+            response.getWriter().println();
 
-            /*
-            response.getWriter().println("Classes:\n"+dc.getClasses());
-            response.getWriter().println("Interfaces:\n"+dc.getInterfaces());
-            response.getWriter().println();
-            response.getWriter().println("Enums:\n" + dc.getEnums());
-            response.getWriter().println("Methods");
-            response.getWriter().println(dc.getMethods());
-            response.getWriter().println("Variables:\n" + dc.getVariables());
-            response.getWriter().println("Comment count:"+dc.commentCount(cu));
-            */
-            response.getWriter().println();
-            response.getWriter().println();
-            response.getWriter().println();
-            variables=dc.getVariablesList();classes=dc.getClassList();interfaces=dc.getInterfaceList();enums=dc.getEnumList();methods=dc.getMethodList();
+            variables.addAll(dc.getVariablesList());
+            classes.addAll(dc.getClassList());
+            interfaces.addAll(dc.getInterfaceList());
+            enums.addAll(dc.getEnumList());
+            methods.addAll(dc.getMethodList());
 
-            response.getWriter().println("Classes");
-            for(SLClass e: classes){
+            files.add(new SLFile(s, classes, methods, variables, interfaces, enums, dc.commentCount(cu)));
+
+            /*for(SLClass e: classes){
                 response.getWriter().println(e.toString());
             }
             response.getWriter().println("Methods");
@@ -93,18 +88,52 @@ public class SniffingLinesServer extends HttpServlet {
             response.getWriter().println("Interfaces");
             for(SLInterface e: interfaces){
                 response.getWriter().println(e.toString());
-            }
+            }*/
 
-            /*
-            response.getWriter().println("Variables empty:" + variables.isEmpty());
-            response.getWriter().println("methods empty:" + methods.isEmpty());
-            response.getWriter().println("interfaces empty:" + interfaces.isEmpty());
-            response.getWriter().println("enums empty:" + enums.isEmpty());
-            response.getWriter().println("classes empty:" + classes.isEmpty());
-            */
-
+            //response.getWriter().println(methods);
             dc.clearAll();
+            //response.getWriter().println(methods);
 
+        }
+
+
+        /*response.getWriter().println();
+        response.getWriter().println("Files empty:" + files.isEmpty());
+        response.getWriter().println();*/
+
+        for(SLFile file: files){
+            response.getWriter().println("Classes");
+            for(SLClass e: file.getClasses()){
+                response.getWriter().println("Empty:" + file.getClasses().isEmpty());
+                response.getWriter().println(e.toString());
+            }
+            response.getWriter().println("Methods");
+            for(SLMethod e: file.getMethods()){
+                response.getWriter().println("Empty:" + file.getMethods().isEmpty());
+                response.getWriter().println(e.toString());
+            }
+            response.getWriter().println("Variables");
+            for(SLVariable e: file.getVariables()){
+                response.getWriter().println("Empty:" + file.getVariables().isEmpty());
+                response.getWriter().println(e.toString());
+            }
+            response.getWriter().println("Enums");
+            for(SLEnum e: file.getEnums()){
+                response.getWriter().println("Empty:" + file.getEnums().isEmpty());
+                response.getWriter().println(e.toString());
+            }
+            response.getWriter().println("Interfaces");
+            for(SLInterface e: file.getInterfaces()){
+                response.getWriter().println("Empty:" + file.getInterfaces().isEmpty());
+                response.getWriter().println(e.toString());
+            }
+            response.getWriter().println("Number of comments:" + file.getCommentCount());
+
+            response.getWriter().println("toString:" + file.toString());
+            response.getWriter().println();
+            response.getWriter().println();
+            response.getWriter().println();
+            response.getWriter().println();
         }
         //response.sendRedirect("dashboard.jsp");
     }

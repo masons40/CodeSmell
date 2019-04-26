@@ -49,7 +49,7 @@ public class FileTransfer {
             showFiles(zipFile);
         }
 
-        deleteDataFolder(new File(mainFilePath+File.separator + mainName));
+        //deleteDataFolder(new File(mainFilePath+File.separator + mainName));
     }
 
 
@@ -58,13 +58,15 @@ public class FileTransfer {
         File fileJava = new File(javaFilePath);
         File fileCompany = new File(companyFilePath);
         if(!file.exists()) {
+            response.getWriter().println("Creating main area:" + fileJava.toString());
             file.mkdir();
         }
         if(!fileJava.exists()) {
-            //response.getWriter().println("Creating java area:" + fileJava.toString());
+            response.getWriter().println("Creating java area:" + fileJava.toString());
             fileJava.mkdir();
         }
         if(!fileCompany.exists()) {
+            response.getWriter().println("Creating company area:" + fileJava.toString());
             fileCompany.mkdir();
         }
     }
@@ -108,7 +110,12 @@ public class FileTransfer {
                     if(iter==0){
                         String path = filePath.toString();
                         mainName = path.substring(path.lastIndexOf("files" + File.separator)+"files".length()+1);
-                        mainName = mainName.substring(0,mainName.indexOf(File.separator));
+                        if(mainName.contains(File.separator)){
+                            mainName = mainName.substring(0,mainName.indexOf(File.separator));
+                        }else{
+                            mainName = mainName.substring(mainName.length());
+                        }
+
                         iter++;
                     }
                     Files.createDirectories(filePath);
@@ -190,5 +197,5 @@ public class FileTransfer {
     /*public String getCompanyFilePath(){
         return companyFilePath;
     }*/
-
+    
 }

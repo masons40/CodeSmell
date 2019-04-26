@@ -50,7 +50,7 @@
                 <h1>Smells</h1>
             </div>
             
-            <form method="POST" action="/SniffingLines_war_exploded/SniffingLinesServer" enctype="multipart/form-data" id="data-collection-form" name="data-collection-form">
+            <form method="POST" action="/SniffingLinesServer" enctype="multipart/form-data" id="data-collection-form" name="data-collection-form">
                 <div id="form-inputs">
                     <img src="resources/images/p.png"/>
                     <p id="data-collection-form-message"><i class="fas fa-exclamation-triangle" style="color:red;font-size:0.6em;"></i></p>
