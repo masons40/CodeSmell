@@ -61,7 +61,6 @@ public class DataCollection {
             ArrayList<SLVariable> interfaceVariables = new ArrayList<>();
             ArrayList<String> interfaceExtends = new ArrayList<>();
 
-
             i.findAll(MethodDeclaration.class).forEach(m -> {
                 ArrayList<String> parameters = new ArrayList<>();
                 for(Parameter p: m.getParameters()){

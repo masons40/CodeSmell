@@ -22,7 +22,6 @@ public class SniffingLinesServer extends HttpServlet {
     private ArrayList<String> javaFileNames;
     private String javaFilePath="",companyFilePath="";
 
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         fileTransfer = new FileTransfer(request, response);
@@ -33,11 +32,9 @@ public class SniffingLinesServer extends HttpServlet {
 
         ArrayList<SLFile> files = new ArrayList<>();
 
-
         InputStream in = null;
         CompilationUnit cu = null;
         for(String s : javaFileNames) {
-
             ArrayList<SLVariable> variables = new ArrayList<>();
             ArrayList<SLMethod> methods = new ArrayList<>();
             ArrayList<SLClass> classes = new ArrayList<>();
@@ -96,6 +93,12 @@ public class SniffingLinesServer extends HttpServlet {
 
         }
 
+
+        //todo () add smellls
+
+        for(SLFile file: files){
+        
+        }
 
         /*response.getWriter().println();
         response.getWriter().println("Files empty:" + files.isEmpty());

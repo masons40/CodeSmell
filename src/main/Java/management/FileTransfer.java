@@ -16,11 +16,8 @@ import static org.apache.commons.io.FileUtils.copyFileToDirectory;
 
 public class FileTransfer {
 
-
     private String java_dir="java";
-
     private ArrayList<String> filenames = new ArrayList<>();
-
     private String mainFilePath;
     private String javaFilePath;
     private String companyFilePath;
@@ -58,15 +55,15 @@ public class FileTransfer {
         File fileJava = new File(javaFilePath);
         File fileCompany = new File(companyFilePath);
         if(!file.exists()) {
-            response.getWriter().println("Creating main area:" + fileJava.toString());
+            //response.getWriter().println("Creating main area:" + fileJava.toString());
             file.mkdir();
         }
         if(!fileJava.exists()) {
-            response.getWriter().println("Creating java area:" + fileJava.toString());
+            //response.getWriter().println("Creating java area:" + fileJava.toString());
             fileJava.mkdir();
         }
         if(!fileCompany.exists()) {
-            response.getWriter().println("Creating company area:" + fileJava.toString());
+            //response.getWriter().println("Creating company area:" + fileJava.toString());
             fileCompany.mkdir();
         }
     }
