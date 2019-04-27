@@ -1,6 +1,10 @@
 package smells;
 
 import files.SLClass;
+<<<<<<< Updated upstream
+=======
+import smells.SmellReport;
+>>>>>>> Stashed changes
 public class SwitchBlocksSmell extends SmellReport {
 
 	private String condition;

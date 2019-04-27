@@ -66,26 +66,6 @@ public class SniffingLinesServer extends HttpServlet {
 
             files.add(new SLFile(s, classes, methods, variables, interfaces, enums, dc.commentCount(cu)));
 
-            /*for(SLClass e: classes){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Methods");
-            for(SLMethod e: methods){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Variables");
-            for(SLVariable e: variables){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Enums");
-            for(SLEnum e: enums){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Interfaces");
-            for(SLInterface e: interfaces){
-                response.getWriter().println(e.toString());
-            }*/
-
             //response.getWriter().println(methods);
             dc.clearAll();
             //response.getWriter().println(methods);
