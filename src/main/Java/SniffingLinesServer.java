@@ -2,8 +2,11 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import files.*;
 import management.FileTransfer;
+import smells.GeneralOverview;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -55,10 +58,6 @@ public class SniffingLinesServer extends HttpServlet {
             }catch(Exception e){
                 response.getWriter().println(e);
             }
-            response.getWriter().println();
-            response.getWriter().println();
-            response.getWriter().println();
-
             variables.addAll(dc.getVariablesList());
             classes.addAll(dc.getClassList());
             interfaces.addAll(dc.getInterfaceList());
@@ -93,53 +92,48 @@ public class SniffingLinesServer extends HttpServlet {
 
         }
 
+//        response.getWriter().println();
+//        response.getWriter().println("Files empty:" + files.isEmpty());
+//        response.getWriter().println();
+//
+//        for(SLFile file: files){
+//            response.getWriter().println("Classes");
+//            for(SLClass e: file.getClasses()){
+//                response.getWriter().println(e.toString());
+//            }
+//            response.getWriter().println("Methods");
+//            for(SLMethod e: file.getMethods()){
+//                response.getWriter().println(e.toString());
+//            }
+//            response.getWriter().println("Variables");
+//            for(SLVariable e: file.getVariables()){
+//                response.getWriter().println(e.toString());
+//            }
+//            response.getWriter().println("Enums");
+//            for(SLEnum e: file.getEnums()){
+//                response.getWriter().println(e.toString());
+//            }
+//            response.getWriter().println("Interfaces");
+//            for(SLInterface e: file.getInterfaces()){
+//                response.getWriter().println(e.toString());
+//            }
+//            response.getWriter().println("Number of comments:" + file.getCommentCount());
+//
+//            response.getWriter().println("toString:" + file.toString());
+//            response.getWriter().println();
+//            response.getWriter().println();
+//            response.getWriter().println();
+//            response.getWriter().println();
+//        }
+        GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
 
-        //todo () add smellls
 
-        for(SLFile file: files){
-
-
+        try (Writer writer = new FileWriter("C:\\Users\\mason\\IdeaProjects\\SniffingLines\\CodeSmell\\target\\sniffingLines\\resources\\files\\asd\\Output.json")) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+            gson.toJson(go, writer);
         }
 
-        /*response.getWriter().println();
-        response.getWriter().println("Files empty:" + files.isEmpty());
-        response.getWriter().println();*/
-
-        for(SLFile file: files){
-            response.getWriter().println("Classes");
-            for(SLClass e: file.getClasses()){
-                response.getWriter().println("Empty:" + file.getClasses().isEmpty());
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Methods");
-            for(SLMethod e: file.getMethods()){
-                response.getWriter().println("Empty:" + file.getMethods().isEmpty());
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Variables");
-            for(SLVariable e: file.getVariables()){
-                response.getWriter().println("Empty:" + file.getVariables().isEmpty());
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Enums");
-            for(SLEnum e: file.getEnums()){
-                response.getWriter().println("Empty:" + file.getEnums().isEmpty());
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Interfaces");
-            for(SLInterface e: file.getInterfaces()){
-                response.getWriter().println("Empty:" + file.getInterfaces().isEmpty());
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Number of comments:" + file.getCommentCount());
-
-            response.getWriter().println("toString:" + file.toString());
-            response.getWriter().println();
-            response.getWriter().println();
-            response.getWriter().println();
-            response.getWriter().println();
-        }
-        //response.sendRedirect("dashboard.jsp");
+        response.sendRedirect("dashboard.jsp");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
