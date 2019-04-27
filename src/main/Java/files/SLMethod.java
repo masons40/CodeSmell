@@ -38,7 +38,7 @@ public class SLMethod {
         return parameters;
     }
 
-    public ArrayList getMethodBody(){
+    public ArrayList<String> getMethodBody(){
         return methodBody;
     }
 

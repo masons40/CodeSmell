@@ -52,6 +52,10 @@ public class SLClass {
         return interfaces;
     }
 
+    public ArrayList<SLMethod> getMethods(){
+        return methods;
+    }
+
 
     public void addSubClasses(String s){
         sublclasses.add(s.replaceAll("\\s+|\\t+", ""));

@@ -5,13 +5,14 @@ import files.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnusedMethods {
 
     //Method takes in a hash map of methods to integer where integer value is the number of times a method has been used
-    public HashMap<SLMethod, Integer> findMethodUsage(File file, HashMap<SLMethod, Integer> methodUsage) throws Exception {
-        BufferedReader br1 = new BufferedReader(new FileReader(file));
+    public HashMap<SLMethod, Integer> findMethodUsage(SLClass clazz, HashMap<SLMethod, Integer> methodUsage) throws Exception {
+        /*BufferedReader br1 = new BufferedReader(new FileReader(file));
         BufferedReader br2 = new BufferedReader(new FileReader(file));
 
         String firstLine;
@@ -25,6 +26,16 @@ public class UnusedMethods {
                     int count = methodUsage.get(method);
                     count++;
                     methodUsage.put(method,count);
+                }
+            }
+        }*/
+        for (SLMethod searchClassMethod : clazz.getMethods()) {
+            for (String line : searchClassMethod.getMethodBody())
+                for (SLMethod method : methodUsage.keySet()) {
+                    if (line.contains(method.getName() + "(")) {
+                        int count = methodUsage.get(method);
+                        count++;
+                        methodUsage.put(method, count);
                 }
             }
         }
