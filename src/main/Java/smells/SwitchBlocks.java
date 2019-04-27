@@ -10,11 +10,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-<<<<<<< Updated upstream
-=======
 import smells.SwitchBlocksSmell;
->>>>>>> Stashed changes
+
 import files.SLClass;
 
 
