@@ -3,7 +3,6 @@ import files.SLClass;
 import files.SLFile;
 import files.SLMethod;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public class GodClasses {
     private ArrayList<SLClass> godClasses = new ArrayList<>();
     private ArrayList<Double> godScores = new ArrayList<>();
 
-    public GodClasses(ArrayList<SLFile> files, HttpServletResponse response) throws IOException {
+    public GodClasses(ArrayList<SLFile> files){
         this.files = files;
     }
 
@@ -29,9 +28,8 @@ public class GodClasses {
     then compare the god score of each class to the average and if
     it has a score greater than 2 and a half time the average
      */
-    public ArrayList<SLClass> findGodClasses(String javaFilePath) throws IOException {
+    public ArrayList<SLClass> findGodClasses() throws IOException {
         for (SLFile slFile: files) {
-            //File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
             ArrayList<SLClass> classes = slFile.getClasses();
             for (SLClass clazz : classes) {
                 int numLines = getNumOfFileLines(clazz);
@@ -43,7 +41,6 @@ public class GodClasses {
         averageGodScore = averageGodScore/files.size();
 
         for (SLFile slFile:files) {
-            //File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
             ArrayList<SLClass> classes = slFile.getClasses();
             for (SLClass clazz : classes) {
                 int numLines = getNumOfFileLines(clazz);
@@ -64,7 +61,7 @@ public class GodClasses {
         return (numOfLines*0.1)+(numOfMethods*0.7);
     }
 
-    private static int getNumOfFileLines(SLClass clazz) throws IOException {
+    private static int getNumOfFileLines(SLClass clazz){
         int numOfLines = 0;
 
         for (SLMethod method : clazz.getMethods()) {
@@ -73,35 +70,4 @@ public class GodClasses {
 
         return numOfLines;
     }
-
-    /*
-    If an object is Tightly Coupled it is reliant too much on different objects.
-    A god class would be tightly coupled as having access to too much data fits part of the definition
-    of a god class, metrics might include methods used from other classes, number of objects of other
-    classes in the class
-     */
-    /*private boolean isTightlyCoupled(SLClass clss) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("/Users/markhartnett/Documents/CodeSnifferPractice/src/"+clss.getName()));
-        String tempLine;
-        int outsideMethodCalls = 0;
-
-        ArrayList<Method> allMethods = new ArrayList<>();
-        for (SLClass clazz: classes) {
-            if(cls!=clazz) {
-                allMethods.addAll(cls.getMethods());
-            }
-        }
-
-        //search through the class itself and see how many outside methods are called
-        while ((tempLine = br.readLine()) != null){
-            for (Method method: allMethods) {
-                if (tempLine.contains(method.getName() + "(")) {
-                    outsideMethodCalls++;
-                }
-            }
-        }
-
-        return outsideMethodCalls>10;
-    }*/
-
 }
