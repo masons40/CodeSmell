@@ -38,6 +38,10 @@ public class SLMethod {
         return parameters;
     }
 
+    public ArrayList getMethodBody(){
+        return methodBody;
+    }
+
     public String methVariables(){
         String res ="";
         for(SLVariable v: methodVariables){
