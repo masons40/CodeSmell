@@ -8,11 +8,12 @@ public class SLClass {
     private String modifier = "";
     private String className="", extendsClassName="";
     private ArrayList<String> interfaces = new ArrayList<>();
-    private HashMap<String, Boolean> classBools = new HashMap<>();
     private ArrayList<String> sublclasses = new ArrayList<>();
-    private Boolean subclass = false;
+    private ArrayList<SLMethod> methods = new ArrayList<>();
+    private ArrayList<SLVariable> variables = new ArrayList<>();
+    private Boolean subclass;
 
-    public SLClass(ArrayList<String> modifier, String className, ArrayList<String> extendsClassName, ArrayList interfaces, Boolean sublcass){
+    public SLClass(ArrayList<String> modifier, String className, ArrayList<String> extendsClassName, ArrayList interfaces, Boolean sublcass, ArrayList methods, ArrayList variables){
         if(!(modifier.isEmpty())){
             this.modifier = modifier.get(0);
         }else{
@@ -26,29 +27,14 @@ public class SLClass {
         }
         this.interfaces = interfaces;
         this.subclass = sublcass;
+        this.methods = methods;
+        this.variables = variables;
 
-        /*
-        classBools.put("implementsInterfaces",Boolean.FALSE);
-        classBools.put("extendsClass",Boolean.FALSE);
-        classBools.put("containsInnerClass",Boolean.FALSE);
-        classBools.put("final",Boolean.FALSE);
-        classBools.put("abstract",Boolean.FALSE);
-        classBools.put("strictfp",Boolean.FALSE);
-        classBools.put("public",Boolean.FALSE);
-        classBools.put("private",Boolean.FALSE);
-        classBools.put("protected",Boolean.FALSE);
-        classBools.put("static",Boolean.FALSE);
-        */
     }
 
     public ArrayList getSubClasses(){
         return sublclasses;
     }
-
-    /*
-    public boolean getClassBools(String boolName){
-        return classBools.get(boolName);
-    }*/
 
     public String getClassModfier(){
         return modifier;
@@ -71,32 +57,7 @@ public class SLClass {
         sublclasses.add(s.replaceAll("\\s+|\\t+", ""));
     }
 
-    /*
-    public void setClassBoolToTrue(String boolName){
-        classBools.put(boolName, true);
-    }*/
 
-    public void setClassModfier(String m){
-        modifier = m;
-        //classBools.put(m, true);
-    }
-
-
-
-    // get rid of this method in the future, only needed now because the god class uses it
-    public void getMethods(){
-
-    }
-
-
-
-    public void setClassName(String s){
-         className = s.replaceAll("\\s+|\\t+", "");
-    }
-
-    public void  setExtendsName(String s){
-        extendsClassName = s;//classBools.put("extendsClass", true);
-    }
 
     public void setImplementsName(String s){
         interfaces.add(s.replaceAll("\\s+|\\t+","" ));
@@ -105,12 +66,24 @@ public class SLClass {
 
     public String toString(){
         return modifier +" "+ className +" "+extendsClassName+
-                "\n" + interfaces.toString() + "\n"+ classBools.toString() + "\n" + sublclasses.toString();
+                "\n" + interfaces.toString() + "\n" + sublclasses.toString();
+    }
+    public String variablesString(){
+        String res="";
+        for(SLVariable v: variables){
+            res+=v.toString()+"\n";
+        }
+        return res;
     }
 
-    public void setSubClass(){
-        subclass=true;
+    public String methodString(){
+        String res="";
+        for(SLMethod v: methods){
+            res+=v.toString()+"\n";
+        }
+        return res;
     }
+
 
     public Boolean getSubClass(){
         return subclass;

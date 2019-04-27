@@ -1,5 +1,6 @@
 package files;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*
 Class used to represent a method
@@ -8,15 +9,17 @@ public class SLMethod {
     private String accessor;
     private String name;
     private String returnType;
-    private String methodBody;
+    private ArrayList<String> methodBody;
     private ArrayList<String> parameters;
+    private ArrayList<SLVariable> methodVariables;
 
-    public SLMethod(String name, String accessor, String returnType, ArrayList parameters, String methodbody) {
+    public SLMethod(String name, String accessor, String returnType, ArrayList parameters, String methodbody, ArrayList methodVariables) {
         this.name = name;
         this.accessor = accessor;
         this.returnType = returnType;
         this.parameters = parameters;
-        this.methodBody = methodbody;
+        this.methodBody = new ArrayList<>(Arrays.asList(methodbody.split("\n")));
+        this.methodVariables = methodVariables;
     }
 
     public String getAccessor(){
@@ -35,7 +38,14 @@ public class SLMethod {
         return parameters;
     }
 
-    @Override
+    public String methVariables(){
+        String res ="";
+        for(SLVariable v: methodVariables){
+            res+=v.toString()+"\n";
+        }
+        return res;
+    }
+
     public String toString() {
         String result = accessor + " " + returnType + " " + name + "(" ;
         for (int i = 0; i < parameters.size(); i++) {

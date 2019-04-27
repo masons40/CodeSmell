@@ -37,6 +37,7 @@ public class SniffingLinesServer extends HttpServlet {
 
         InputStream in = null;
         CompilationUnit cu = null;
+        response.getWriter().println(javaFileNames.toString());
         for(String s : javaFileNames) {
             ArrayList<SLVariable> variables = new ArrayList<>();
             ArrayList<SLMethod> methods = new ArrayList<>();
@@ -63,47 +64,23 @@ public class SniffingLinesServer extends HttpServlet {
             interfaces.addAll(dc.getInterfaceList());
             enums.addAll(dc.getEnumList());
             methods.addAll(dc.getMethodList());
-
             files.add(new SLFile(s, classes, methods, variables, interfaces, enums, dc.commentCount(cu)));
-
-            /*for(SLClass e: classes){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Methods");
-            for(SLMethod e: methods){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Variables");
-            for(SLVariable e: variables){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Enums");
-            for(SLEnum e: enums){
-                response.getWriter().println(e.toString());
-            }
-            response.getWriter().println("Interfaces");
-            for(SLInterface e: interfaces){
-                response.getWriter().println(e.toString());
-            }*/
-
-            //response.getWriter().println(methods);
             dc.clearAll();
-            //response.getWriter().println(methods);
-
         }
-
-//        response.getWriter().println();
-//        response.getWriter().println("Files empty:" + files.isEmpty());
-//        response.getWriter().println();
-//
-//        for(SLFile file: files){
-//            response.getWriter().println("Classes");
+        for(SLFile file: files){
+            response.getWriter().println("Classes");
 //            for(SLClass e: file.getClasses()){
 //                response.getWriter().println(e.toString());
+//                response.getWriter().println("Class methods:");
+//                response.getWriter().println(e.methodString());
+//                response.getWriter().println("Class Variables:");
+//                response.getWriter().println(e.variablesString());
 //            }
 //            response.getWriter().println("Methods");
 //            for(SLMethod e: file.getMethods()){
-//                response.getWriter().println(e.toString());
+//                response.getWriter().println(e.test());
+//                response.getWriter().println();
+//                response.getWriter().println(e.methVariables());
 //            }
 //            response.getWriter().println("Variables");
 //            for(SLVariable e: file.getVariables()){
@@ -118,13 +95,7 @@ public class SniffingLinesServer extends HttpServlet {
 //                response.getWriter().println(e.toString());
 //            }
 //            response.getWriter().println("Number of comments:" + file.getCommentCount());
-//
-//            response.getWriter().println("toString:" + file.toString());
-//            response.getWriter().println();
-//            response.getWriter().println();
-//            response.getWriter().println();
-//            response.getWriter().println();
-//        }
+        }
         GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
 
 
@@ -133,7 +104,7 @@ public class SniffingLinesServer extends HttpServlet {
             gson.toJson(go, writer);
         }
 
-        response.sendRedirect("dashboard.jsp");
+        //response.sendRedirect("dashboard.jsp");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

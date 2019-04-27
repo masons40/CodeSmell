@@ -66,7 +66,7 @@ public class DataCollection {
                 for(Parameter p: m.getParameters()){
                     parameters.add(p.getType().asString()+" "+p.getName().asString());
                 }
-                interfaceMethod.add(new SLMethod(m.getName().asString(),m.getModifiers().toString(),m.getType().asString(),parameters, ""));
+                interfaceMethod.add(new SLMethod(m.getName().asString(),m.getModifiers().toString(),m.getType().asString(),parameters, "", null));
             });
             i.findAll(FieldDeclaration.class).stream().filter(FieldDeclaration::isFieldDeclaration).forEach(f  -> {
                 for(VariableDeclarator ivd: f.getVariables()){
@@ -86,6 +86,8 @@ public class DataCollection {
             ArrayList<String> extendsName = new ArrayList<>();
             ArrayList<String> classModifier = new ArrayList<>();
             ArrayList<String> implementsNames = new ArrayList<>();
+            ArrayList<SLMethod> classMethods = new ArrayList<>();
+            ArrayList<SLVariable> classVariables = new ArrayList<>();
 
             for(ClassOrInterfaceType e:c.getExtendedTypes()) {
                 extendsName.add(e.toString());
@@ -99,7 +101,35 @@ public class DataCollection {
             if(c.isInnerClass()){
                 classes.get(classPrev).addSubClasses(name);
             }
-            classes.add(new SLClass(classModifier, name, extendsName, implementsNames, c.isInnerClass()));
+            c.findAll(FieldDeclaration.class).stream().filter(FieldDeclaration::isFieldDeclaration).forEach(f  -> {
+                for(VariableDeclarator ivd: f.getVariables()){
+                    classVariables.add(new SLVariable(f.getModifiers().toString(),ivd.getType().asString(),ivd.getName().asString()));
+                }
+            });
+            c.findAll(MethodDeclaration.class).stream().filter(m -> m.isMethodDeclaration()).forEach(method -> {
+                ArrayList<String> parameters = new ArrayList<>();
+                String type = method.getType().toString();
+                String modifier="";
+                ArrayList<SLVariable> variables = new ArrayList<>();
+                if(!(method.getModifiers().isEmpty())){
+                    modifier = method.getModifiers().get(0).toString();
+                }
+                String methodname = method.getName().asString();
+                for(Parameter p: method.getParameters()){
+                    parameters.add(p.getType().asString()+" "+p.getName().asString());
+                }
+                String body="";
+                for(Object b:method.getBody().stream().toArray()){
+                    body+=b.toString();
+                }
+                method.findAll(FieldDeclaration.class).stream().filter(FieldDeclaration::isFieldDeclaration).forEach(v  -> {
+                    for(VariableDeclarator ivd: v.getVariables()){
+                        variables.add(new SLVariable(method.getModifiers().toString(),ivd.getType().asString(),ivd.getName().asString()));
+                    }
+                });
+                classMethods.add(new SLMethod(methodname,modifier,type,parameters,body, variables));
+            });
+            classes.add(new SLClass(classModifier, name, extendsName, implementsNames, c.isInnerClass(), classMethods, classVariables));
             classPrev++;
         });
     }
@@ -109,6 +139,7 @@ public class DataCollection {
             ArrayList<String> parameters = new ArrayList<>();
             String type = f.getType().toString();
             String modifier="";
+            ArrayList<SLVariable> methodVariables = new ArrayList<>();
             if(!(f.getModifiers().isEmpty())){
                 modifier = f.getModifiers().get(0).toString();
             }
@@ -116,11 +147,16 @@ public class DataCollection {
             for(Parameter p: f.getParameters()){
                 parameters.add(p.getType().asString()+" "+p.getName().asString());
             }
-            String body=null;
+            String body="";
             for(Object b:f.getBody().stream().toArray()){
                 body+=b.toString();
             }
-            methods.add(new SLMethod(name,modifier,type,parameters,body));
+            f.findAll(FieldDeclaration.class).stream().filter(FieldDeclaration::isFieldDeclaration).forEach(v  -> {
+                for(VariableDeclarator ivd: v.getVariables()){
+                    methodVariables.add(new SLVariable(f.getModifiers().toString(),ivd.getType().asString(),ivd.getName().asString()));
+                }
+            });
+            methods.add(new SLMethod(name,modifier,type,parameters,body, methodVariables));
         });
     }
 
