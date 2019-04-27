@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import smells.SwitchBlocksSmell;
 
 import files.SLClass;
 

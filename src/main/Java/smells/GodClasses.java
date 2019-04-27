@@ -1,6 +1,8 @@
 package smells;
 import files.SLClass;
+import files.SLFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -11,10 +13,12 @@ this. We will try to detect this by looking at the number of lines and the numbe
 of methods in the class
  */
 public class GodClasses {
-    ArrayList<SLClass> classes;
+    ArrayList<SLFile> files;
 
-    public GodClasses(ArrayList<SLClass> classes){
-        this.classes = classes;
+    public GodClasses(ArrayList<SLFile> files, HttpServletResponse response) throws IOException {
+        //response.getWriter().println("entered constructor");
+        this.files = files;
+        //response.getWriter().println("exiting constructor");
     }
 
     /*
@@ -22,33 +26,33 @@ public class GodClasses {
     then compare the god score of each class to the average and if
     it has a score greater than 2 and a half time the average
      */
-    public ArrayList<SLClass> findGodClasses() throws IOException {
-        ArrayList<SLClass> godClasses = new ArrayList<>();
+    public ArrayList<SLFile> findGodClasses(String javaFilePath) throws IOException {
+        ArrayList<SLFile> godClasses = new ArrayList<>();
 
         double avgGodScore = 0;
 
-        for (SLClass clazz:classes) {
-            File file = new File("filepath" + clazz.getClassName());
+        for (SLFile clazz: files) {
+            File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
             int numLines = getNumOfFileLines(file);
 
-            int numMethods =  4;//clazz.getMethods().size();                   change in future
-            avgGodScore += calculateGodScore(numLines,numMethods);
+            int numMethods = clazz.getMethods().size();                   //change in future
+            avgGodScore += calculateGodScore(numLines, numMethods);
         }
 
-        avgGodScore = avgGodScore/classes.size();
+        avgGodScore = avgGodScore/files.size();
 
-        for (SLClass clazz:classes) {
-            File file = new File("filepath" + clazz.getClassName());
+        for (SLFile clazz:files) {
+
+            File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
             int numLines = getNumOfFileLines(file);
 
-            int numMethods = 44; //clazz.getMethods().size();                   change in future
-            double godScore = calculateGodScore(numLines,numMethods);
+            int numMethods = clazz.getMethods().size();                   //change in future
+            double godScore = calculateGodScore(numLines, numMethods);
 
-            if(godScore >= (2.5*avgGodScore)){
+            if ((godScore >= (3.5 * avgGodScore)) || (numLines>400)) {
                 godClasses.add(clazz);
             }
         }
-
         return godClasses;
     }
 
@@ -63,16 +67,19 @@ public class GodClasses {
             LineNumberReader lnr = new LineNumberReader(fr);
 
             int numLines=0;
+            String line;
 
-            while (lnr.readLine() != null){
-                numLines++;
+            while ((line = lnr.readLine()) != null){
+                //if(line.matches(".*[^[\\s]].*")) {
+                    numLines++;
+                //}
             }
 
             lnr.close();
             return numLines;
         }
         else{
-            System.out.println("File does not exist");
+            //System.out.println("File does not exist");
             return 0;
         }
     }
