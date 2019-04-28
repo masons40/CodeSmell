@@ -76,4 +76,13 @@ public class SLMethod {
         result += ")";
         return result;
     }
+
+    public ArrayList<SLVariable> findMethodVariables() {
+        for (String line: methodBody) {
+            VariableDetector variableDetector = new VariableDetector();
+            methodVariables.addAll(variableDetector.checkForVariables(line));
+        }
+
+        return methodVariables;
+    }
 }

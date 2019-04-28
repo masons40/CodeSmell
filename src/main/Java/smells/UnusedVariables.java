@@ -1,43 +1,69 @@
 package smells;
 
-import files.SLClass;
-import files.SLFile;
-import files.SLMethod;
-import files.SLVariable;
+import files.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnusedVariables {
+    private ArrayList<SLFile> files = new ArrayList<>();
+    private HashMap<SLVariable, SLClass> unusedVariableClasses = new HashMap<>();
+    private ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+    private int numberOfUnusedVariables = 0;
 
-    public HashMap<SLVariable, Boolean> findVariableUsage(SLFile file, HashMap<SLVariable, Boolean> variableUsage) {
-        for (SLClass clazz: file.getClasses()) {
-            //get field variables here
-            for (SLMethod method:clazz.getMethods()) {
-                for (String line : method.getMethodBody()) {
-                    for (SLVariable var: variableUsage.keySet()) {
-                        variableUsage.put(var, isUsed(line, var.getName()));
+    public UnusedVariables(ArrayList<SLFile> files){
+        this.files = files;
+        findUnusedFieldVariables();
+    }
+
+    public ArrayList<SLVariable> findUnusedFieldVariables() {
+        ArrayList<SLVariable> remove = new ArrayList<>();
+
+        for (SLFile f: files) {
+            for (SLClass c: f.getClasses()) {
+                unusedVariables.addAll(c.getVariables());
+                for (SLMethod m: c.getMethods()) {
+                    unusedVariables.addAll(m.findMethodVariables());
+                    for (String line: m.getMethodBody()) {
+                        for (SLVariable var: unusedVariables) {
+                            if (isUsed(line, var.getName())) {
+                                remove.add(var);
+                            }
+                        }
                     }
                 }
             }
         }
 
-        return variableUsage;
+        unusedVariables.removeAll(remove);
+
+        for (SLVariable variable : unusedVariables) {
+            for (SLFile file :files) {
+                for (SLClass clazz : file.getClasses()) {
+                    if(clazz.getMethods().contains(variable)){
+                        unusedVariableClasses.put(variable,clazz);
+                    }
+                }
+            }
+        }
+
+        numberOfUnusedVariables = 0;
+
+        return unusedVariables;
     }
 
     public boolean isUsed(String line, String variableName) {
         String[] lineSplitUp = line.split("\\s+");
         String lineNoSpaces = line.replaceAll("\\s+", "");
 
+        VariableDetector detector = new VariableDetector();
+
         if (lineNoSpaces.matches(".*([^[a-zA-Z]]|\\s*)"+variableName+"[^[a-zA-Z0-9]].*") &&
-                (!isVariableDeclaration(line, variableName) || !variableName.equals(findVariableName(lineSplitUp)))) {
+                (!detector.isVariable(line) || !variableName.equals(findVariableName(lineSplitUp)))) {
             return true;
         }
 
         return false;
-    }
-
-    private boolean isVariableDeclaration(String line, String variable) {
-        return line.matches(".*+"+variable+".*=.*");
     }
 
     private String findVariableName(String[] lineSplit) {

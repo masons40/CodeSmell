@@ -7,62 +7,64 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import smells.SwitchBlocksSmell;
 
-import files.SLClass;
+import files.*;
 
+public class SwitchBlocks{
 
-public class SwitchBlocks extends SmellDetector{
+	private HashMap<String, Integer> switchBlocks = new HashMap<>();
+	private String caseRegex = String.format("case|default");
 
 	public SwitchBlocks(){
 	}
 
-	public ArrayList<SwitchBlocksSmell> evaluate(File file, SLClass originalClass) throws Exception{
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		ArrayList<SwitchBlocksSmell> switchBlocks = new ArrayList<>(); //Variable -> Number of Cases
+	public HashMap<String, Integer> getSwitchBlocks(ArrayList<SLFile> files) {
+		boolean readingSwitchBlock = false;
 		Stack<Character> brackets = new Stack<>();
 		Pattern openBracket = Pattern.compile("[^\\{]*\\{");
 		Pattern closeBracket = Pattern.compile("[^\\}]*\\}");
-		String line="", condition="";
-		boolean readingSwitchBlock = false;
 		int numCases=0;
-		int startLine = 0;
+		String newSwitchBlock = null;
 
-		while ((line = br.readLine()) != null) {
-			line = line.replaceAll("\\s+", "");
-			if(line.matches("switch\\(.*")) { //If line contains keyword "switch"
-				readingSwitchBlock= true;
-				startLine = lineCount;
-				//Extract switch variable within parenthesis
-				condition = findCondition(line);
-			}
-			if (readingSwitchBlock) {
-				if(line.startsWith("case") || line.startsWith("default")) {
-					numCases++;
-				}
-				Matcher openMatcher = openBracket.matcher(line);
-				while (openMatcher.find()) {
-					brackets.push('{');
-				}
-				Matcher matcher = closeBracket.matcher(line);
-				while (matcher.find()) {
-					brackets.pop();
-				}
-				if(brackets.isEmpty()) { //reached end of switch block
-					SwitchBlocksSmell newSmell = new SwitchBlocksSmell(condition, numCases, startLine, lineCount, originalClass);
-					switchBlocks.add(newSmell);
-					numCases=0;
-					startLine=0;
+		for(SLFile f : files) {
+			for (SLClass clazz : f.getClasses()) {
+				for (SLMethod m : clazz.getMethods()) {
 					readingSwitchBlock = false;
+					for (String line : m.getMethodBody()) {
+						if (line.matches("(\\s|\\t)*(switch)(\\s|\\t)*\\(.*\\)(\\s|\\t)*\\{(\\s|\\t)*")) {
+							readingSwitchBlock = true;
+							newSwitchBlock = findCondition(line);
+						}
+						if(readingSwitchBlock) {
+							if (line.contains("case")||line.contains("default")) {
+								numCases++;
+							}
+							Matcher openMatcher = openBracket.matcher(line);
+							while (openMatcher.find()) {
+								brackets.push('{');
+							}
+							Matcher matcher = closeBracket.matcher(line);
+							while (matcher.find()) {
+								brackets.pop();
+							}
+
+							if (brackets.isEmpty()) { //reached end of switch block
+								switchBlocks.put(newSwitchBlock, numCases);
+								numCases = 0;
+								readingSwitchBlock = false;
+							}
+
+						}
+					}
 				}
 			}
-			lineCount++;
 		}
 
-		return switchBlocks;
+		return  switchBlocks;
 	}
 
 	//Return ((condition)) between parenthesis
