@@ -52,6 +52,14 @@ public class SLClass {
         return interfaces;
     }
 
+    public ArrayList<SLMethod> getMethods(){
+        return methods;
+    }
+
+    public ArrayList<SLVariable> getVariables(){
+        return variables;
+    }
+
 
     public void addSubClasses(String s){
         sublclasses.add(s.replaceAll("\\s+|\\t+", ""));

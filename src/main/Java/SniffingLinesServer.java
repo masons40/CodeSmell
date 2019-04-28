@@ -4,6 +4,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import files.*;
 import management.FileTransfer;
 import smells.GeneralOverview;
@@ -37,7 +38,6 @@ public class SniffingLinesServer extends HttpServlet {
 
         InputStream in = null;
         CompilationUnit cu = null;
-        response.getWriter().println(javaFileNames.toString());
         for(String s : javaFileNames) {
             ArrayList<SLVariable> variables = new ArrayList<>();
             ArrayList<SLMethod> methods = new ArrayList<>();
@@ -68,18 +68,18 @@ public class SniffingLinesServer extends HttpServlet {
             dc.clearAll();
         }
         for(SLFile file: files){
-            response.getWriter().println("Classes");
-//            for(SLClass e: file.getClasses()){
-//                response.getWriter().println(e.toString());
-//                response.getWriter().println("Class methods:");
-//                response.getWriter().println(e.methodString());
-//                response.getWriter().println("Class Variables:");
-//                response.getWriter().println(e.variablesString());
-//            }
+            for(SLClass e: file.getClasses()){
+                response.getWriter().println("Class Methods");
+                for(SLMethod m: e.getMethods()){
+                    response.getWriter().println(m.toString());
+                    response.getWriter().println("Does the method contains variables(size):" + m.getVariables().size());
+                    response.getWriter().println(m.methBody());
+                }
+            }
 //            response.getWriter().println("Methods");
 //            for(SLMethod e: file.getMethods()){
-//                response.getWriter().println(e.test());
-//                response.getWriter().println();
+//                response.getWriter().println(e.toString());
+//                response.getWriter().println(e.methBody());
 //                response.getWriter().println(e.methVariables());
 //            }
 //            response.getWriter().println("Variables");
@@ -98,13 +98,16 @@ public class SniffingLinesServer extends HttpServlet {
         }
         GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
 
-
+        Gson gson;
         try (Writer writer = new FileWriter("C:\\Users\\mason\\IdeaProjects\\SniffingLines\\CodeSmell\\target\\sniffingLines\\resources\\files\\asd\\Output.json")) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+            gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
             gson.toJson(go, writer);
         }
 
-        //response.sendRedirect("dashboard.jsp");
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        request.setAttribute("myname",gson.toJson(go));
+//        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

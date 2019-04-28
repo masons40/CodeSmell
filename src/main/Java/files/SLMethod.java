@@ -42,11 +42,24 @@ public class SLMethod {
         return methodBody;
     }
 
+    public ArrayList getVariables(){
+        return methodVariables;
+    }
+
     public String methVariables(){
         String res ="";
         for(SLVariable v: methodVariables){
-            res+=v.toString()+"\n";
+            res+="Variable found:" + v.toString()+"\n";
         }
+        return res;
+    }
+
+    public String methBody(){
+        String res ="";
+        for(String v: methodBody){
+            res+=v+"\n";
+        }
+        res+="\n";
         return res;
     }
 

@@ -16,6 +16,7 @@
 
     </head>
     <body id="body-dashboard">
+
         <img src="resources/images/bgimage.png" id="bg-image"/>
         <div id="navigation">
             
@@ -53,7 +54,7 @@
         </div>
 
         <main id="main-content">
-            
+            <div id="json-data" style="display:none;" ><%= request.getAttribute("myname") %></div>
             <div class="item-box">
                 
                 <div class="title-box">
@@ -64,27 +65,27 @@
                 <div class="content">
                     <div class="text-box-layout"> 
                         <div class="box-info text-info">
-                            <h2>14</h2>
+                            <h2 id="class-data"></h2>
                             <h3>Classes</h3>
                         </div>
 
                         <div class="box-info text-info">
-                            <h2>12,904</h2>
-                            <h3>Code lines</h3>
+                            <h2 id="files-data"></h2>
+                            <h3>Files</h3>
                         </div>
 
                         <div class="box-info text-info">
-                            <h2>34</h2>
-                            <h3>Objects Created</h3>
+                            <h2 id="comments-data"></h2>
+                            <h3>Comments</h3>
                         </div>
 
                         <div class="box-info text-info">
-                            <h2>3</h2>
+                            <h2 id="enum-data"></h2>
                             <h3>Enums</h3>
                         </div>
 
                         <div class="box-info text-info">
-                            <h2>5</h2>
+                            <h2 id="interface-data"></h2>
                             <h3>Interfaces</h3>
                         </div>
                     </div>
@@ -126,9 +127,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        
-        <script src="resources/script/script.js"></script>
-        <script src="resources/script/chartScript.js"></script>
+
+        <script src="resources/javascript/chartScript.js"></script>
+        <script src="resources/javascript/infoScript.js"></script>
         
     </body>
 </html>
