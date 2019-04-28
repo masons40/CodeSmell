@@ -32,7 +32,7 @@ public class PrimitiveObsession {
         double numVariable = numberOfVariables;
         double percentage = numPrimitives/numVariable;
 
-        if (numberOfPrimitiveVars > 9 && percentage > 0.5) {
+        if (numberOfPrimitiveVars >= 5 && percentage >= 0.5) {
             return true;
         } else {
             return false;

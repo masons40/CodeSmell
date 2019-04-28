@@ -114,7 +114,7 @@ public class SniffingLinesServer extends HttpServlet {
 //        }
 
 //        UnusedVariables unusedVariables = new UnusedVariables();
-//        response.getWriter().println(unusedVariables.findUnusedFieldVariables(files, response));
+//        response.getWriter().println(unusedVariables.findUnusedFieldVariables(files));
 
 //        response.setContentType("application/json");
 //        response.setCharacterEncoding("UTF-8");

@@ -2,25 +2,18 @@ package smells;
 
 import files.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class UnusedVariables {
 
-    public ArrayList<SLVariable> findUnusedFieldVariables(ArrayList<SLFile> files, HttpServletResponse response) throws IOException {
+    public ArrayList<SLVariable> findUnusedFieldVariables(ArrayList<SLFile> files) {
         ArrayList<SLVariable> unusedVariables = new ArrayList<>();
-
-        for (SLFile f: files) {
-            for (SLClass c: f.getClasses()) {
-                 unusedVariables.addAll(c.getVariables());
-            }
-        }
 
         ArrayList<SLVariable> remove = new ArrayList<>();
 
         for (SLFile f: files) {
             for (SLClass c: f.getClasses()) {
+                unusedVariables.addAll(c.getVariables());
                 for (SLMethod m: c.getMethods()) {
                     unusedVariables.addAll(m.findMethodVariables());
                     for (String line: m.getMethodBody()) {
@@ -40,7 +33,7 @@ public class UnusedVariables {
 
     }
 
-    public boolean isUsed(String line, String variableName) throws IOException {
+    public boolean isUsed(String line, String variableName) {
         String[] lineSplitUp = line.split("\\s+");
         String lineNoSpaces = line.replaceAll("\\s+", "");
 
