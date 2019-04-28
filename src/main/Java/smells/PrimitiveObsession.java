@@ -1,5 +1,7 @@
 package smells;
 
+import files.SLClass;
+import files.SLFile;
 import files.SLVariable;
 
 import java.util.ArrayList;
@@ -30,5 +32,19 @@ public class PrimitiveObsession {
             return false;
         }
 
+    }
+
+    public ArrayList<SLClass> findPrimitiveClasses(ArrayList<SLFile> files) {
+        ArrayList<SLClass> primitiveObsessedClasses = new ArrayList<>();
+
+        for (SLFile f: files) {
+            for (SLClass c: f.getClasses()) {
+                if (isPrimitiveObsession(findPrimitiveVariables(c.getVariables()).size(), c.getVariables().size())) {
+                    primitiveObsessedClasses.add(c);
+                }
+            }
+        }
+
+        return primitiveObsessedClasses;
     }
 }
