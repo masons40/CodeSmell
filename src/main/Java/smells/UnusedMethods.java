@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnusedMethods {
-    private ArrayList<SLFile> files = new ArrayList<>();
+    private transient ArrayList<SLFile> files = new ArrayList<>();
     private HashMap<SLMethod, Integer> methodUsage = new HashMap<>();
     private HashMap<SLMethod, SLClass> unusedMethodsClasses = new HashMap<>();
     private ArrayList<SLMethod> unusedMethods = new ArrayList<>();

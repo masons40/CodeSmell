@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnusedVariables {
-    private ArrayList<SLFile> files = new ArrayList<>();
+    private transient ArrayList<SLFile> files = new ArrayList<>();
     private HashMap<SLVariable, SLClass> unusedVariableClasses = new HashMap<>();
     private ArrayList<SLVariable> unusedVariables = new ArrayList<>();
     private int numberOfUnusedVariables = 0;
