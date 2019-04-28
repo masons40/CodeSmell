@@ -24,6 +24,7 @@ public class FileTransfer {
     private String extension;
     private String fileName;
     private String mainName;
+    private String companyName;
 
     private HttpServletRequest request;
 
@@ -32,7 +33,7 @@ public class FileTransfer {
         this.request = request;
         this.response = response;
         extension = "zip";
-        String companyName = request.getParameter("Cname");
+        companyName = request.getParameter("Cname");
         String sav_dir = "files";
         mainFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir;
         javaFilePath = request.getServletContext().getRealPath("resources") + File.separator + sav_dir + File.separator + companyName + File.separator + java_dir;
@@ -191,8 +192,8 @@ public class FileTransfer {
     }
 
 
-    /*public String getCompanyFilePath(){
-        return companyFilePath;
-    }*/
+    public String getCompanyName(){
+        return companyName;
+    }
     
 }

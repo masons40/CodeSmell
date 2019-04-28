@@ -1,4 +1,8 @@
-
+<%
+    response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+    response.setHeader("Pragma","no-cache"); //HTTP 1.0
+    response.setDateHeader ("Expires", 0);
+%>
 <!DOCTYPE html>
 <html>
 
@@ -54,60 +58,144 @@
         </div>
 
         <main id="main-content">
-            <div id="json-data"><%= request.getAttribute("jsonData") %></div>
+            <div id="json-data" style="display:none;" ><%= request.getAttribute("jsonData") %></div>
             <div class="item-box">
-                
-                <div class="title-box">
-                    <h2>Overview</h2>
+
+                <div class="content" >
+
+                    <div class="title-box">
+                        <h2 id="overview-title">Overview for ASasASa</h2>
+                    </div>
+                    <div id="overview-display">
+                        <div class="text-box-layout">
+                            <div class="box-info text-info">
+                                <h2 id="class-data"></h2>
+                                <h3>Classes</h3>
+                            </div>
+
+                            <div class="box-info text-info">
+                                <h2 id="files-data"></h2>
+                                <h3>Files</h3>
+                            </div>
+
+                            <div class="box-info text-info">
+                                <h2 id="comments-data"></h2>
+                                <h3>Comments</h3>
+                            </div>
+
+                            <div class="box-info text-info">
+                                <h2 id="enum-data"></h2>
+                                <h3>Enums</h3>
+                            </div>
+
+                            <div class="box-info text-info">
+                                <h2 id="interface-data"></h2>
+                                <h3>Interfaces</h3>
+                            </div>
+                        </div>
+
+                        <div id="general-smells-found">
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;">Smells Detected</h2>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+                            <div class="overview-smell">
+                                <span class="overview-circle-colour inline-b"></span>
+                                <h2 class="inline-b general-smell-title">God Class</h2>
+                                <i class="fas fa-check inline-b" style="color:green;"></i>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <%--<div class="pie-chart">--%>
+                        <%--<canvas id="myChart" ></canvas>--%>
+                        <%--<div class="piechart-toggle-data">--%>
+                            <%--<h3>Class Method Breakdown</h3>--%>
+                            <%--<button id="changeCircleSize">change</button>--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+
+
+                    <%--<div class="files-found">--%>
+                        <%--<h2>Files Found</h2>--%>
+                        <%--<div>--%>
+                            <%----%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">Files Detected</h2>
+                    <div id="overview-table">
+
+                    </div>
                 </div>
-                
-                
-                <div class="content">
-                    <div class="text-box-layout"> 
-                        <div class="box-info text-info">
-                            <h2 id="class-data"></h2>
-                            <h3>Classes</h3>
-                        </div>
 
-                        <div class="box-info text-info">
-                            <h2 id="files-data"></h2>
-                            <h3>Files</h3>
-                        </div>
+                <div class="content" >
 
-                        <div class="box-info text-info">
-                            <h2 id="comments-data"></h2>
-                            <h3>Comments</h3>
-                        </div>
-
-                        <div class="box-info text-info">
-                            <h2 id="enum-data"></h2>
-                            <h3>Enums</h3>
-                        </div>
-
-                        <div class="box-info text-info">
-                            <h2 id="interface-data"></h2>
-                            <h3>Interfaces</h3>
-                        </div>
+                    <div class="title-box">
+                        <h2>GodClasses for ASAsasasaS</h2>
                     </div>
-
-                    <div class="area-chart">
-                        <div id="chart_div"></div>
-                    </div>
-
-                    <div class="pie-chart">
-                        <canvas id="myChart" ></canvas>
-                        <div class="piechart-toggle-data">
-                            <h3>Class Method Breakdown</h3>
-                            <button id="changeCircleSize">change</button>
-                        </div>
-                    </div>
-
-
-                    <div class="files-found">
-                        <h2>Files Found</h2>
+                    <div id="godclass-display">
                         <div>
-                            
+                            <div class="area-chart">
+                                <div id="chart_div"></div>
+                            </div>
                         </div>
+
+                        <div id="god-class-found">
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;">God class Metrics</h2>
+                            <div class="overview-smell">
+                                <h2 class="inline-b general-smell-title">Average God score</h2>
+                            </div>
+                            <div class="overview-smell">
+                                <h2 class="inline-b general-smell-title">File Name:</h2>
+                            </div>
+                            <div class="overview-smell">
+                                <h2 class="inline-b general-smell-title">This classes god score</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
+                    <div id="god-class-table">
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
+                        <div class="overview-table-data">Celsius.java</div>
                     </div>
                 </div>
                 
@@ -129,7 +217,6 @@
         <script src="https://d3js.org/d3.v5.min.js"></script>
 
         <script src="resources/javascript/chartScript.js"></script>
-        <script src="resources/javascript/infoScript.js"></script>
         
     </body>
 </html>

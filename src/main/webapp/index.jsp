@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/StyleRetryAgain.css">
 </head>
 <body id="home">
-    <img src="resources/images/bgimage.png" id="bg-image"/>
+    <img src="resources/images/bgimage2.png" id="bg-image"/>
     <a href="#home"><i class="fas fa-arrow-circle-up" id="up-arrow"></i></a>
     <header>
         <div class="navbar">
@@ -52,7 +52,6 @@
             
             <form method="POST" action="/SniffingLinesServer" enctype="multipart/form-data" id="data-collection-form" name="data-collection-form">
                 <div id="form-inputs">
-                    <img src="resources/images/p.png"/>
                     <p id="data-collection-form-message"><i class="fas fa-exclamation-triangle" style="color:red;font-size:0.6em;"></i></p>
                     <input type="text" name="Cname" placeholder="Company Name" id="company_name">
 
@@ -153,6 +152,17 @@
                     <button>Read more</button>
                 </div>
             </div>
+
+            <div class="smell-item" id="Primitive-Obsession-item-tab2">
+                <h2 id="Primitive-Obsession-item2">Primitive Obsession</h2>
+                <p>
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                </p>
+
+                <div class="smell-item-box">
+                    <button>Read more</button>
+                </div>
+            </div>
             
              
         </div>
@@ -207,6 +217,5 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="resources/javascript/script.js"></script>
-    <script src="resources/javascript/chartScript.js"></script>
 </body>
 </html>

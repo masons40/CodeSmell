@@ -18,6 +18,7 @@ public class GodClasses {
     private int numberOfGodClasses = 0;
     private double averageGodScore = 0;
     private ArrayList<String> godClasses = new ArrayList<>();
+    private ArrayList<String> nongodClasses = new ArrayList<>();
     private HashMap<String, Double> godScores = new HashMap<>();
 
     public GodClasses(ArrayList<SLFile> files) throws IOException {

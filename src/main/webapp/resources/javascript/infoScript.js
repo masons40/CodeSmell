@@ -2,13 +2,13 @@ $("document").ready(function(){
 
     var data = document.getElementById('json-data').innerText;
     var obj = JSON.parse(data);
-    var classData  = document.getElementById('class-data').innerText = obj.numberOfClasses;
-    var filesData  = document.getElementById('files-data').innerText = obj.numberOfFiles;
-    var commentsData  = document.getElementById('comments-data').innerText = obj.numberOfComments;
-    var enumData  = document.getElementById('enum-data').innerText = obj.numberOfEnums;
-    var interfaceData  = document.getElementById('interface-data').innerText = obj.numberOfInterfaces;
+    document.getElementById('class-data').innerText = obj.GeneralOverview.numberOfClasses;
+    document.getElementById('files-data').innerText = obj.GeneralOverview.numberOfFiles;
+    document.getElementById('comments-data').innerText = obj.GeneralOverview.numberOfComments;
+    document.getElementById('enum-data').innerText = obj.GeneralOverview.numberOfEnums;
+    document.getElementById('interface-data').innerText = obj.GeneralOverview.numberOfInterfaces;
 
-    console.log(obj);
+    console.log(data);
     $('#changeCircleSize').click(function () {
 
     });

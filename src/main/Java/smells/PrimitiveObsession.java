@@ -9,8 +9,9 @@ import java.util.HashMap;
 
 public class PrimitiveObsession {
 
-    private String primitivesRegex = "(byte|short|int|long|float|double|boolean|char)";
-    private HashMap<SLClass, Integer> primitiveObsessionVarNumber = new HashMap<>();
+    private transient String primitivesRegex = "(byte|short|int|long|float|double|boolean|char)";
+    private HashMap<String, Integer> primitiveObsessionVarNumber = new HashMap<>();
+    private ArrayList<String> primitiveObsessedClasses = new ArrayList<>();
 
     public PrimitiveObsession(ArrayList<SLFile> files) {
         findPrimitiveClasses(files);
@@ -40,19 +41,16 @@ public class PrimitiveObsession {
 
     }
 
-    private ArrayList<SLClass> findPrimitiveClasses(ArrayList<SLFile> files) {
-        ArrayList<SLClass> primitiveObsessedClasses = new ArrayList<>();
+    private void findPrimitiveClasses(ArrayList<SLFile> files) {
 
         for (SLFile f: files) {
             for (SLClass c: f.getClasses()) {
                 int numberOfPrimitives = findPrimitiveVariables(c.getVariables()).size();
                 if (isPrimitiveObsession(numberOfPrimitives, c.getVariables().size())) {
-                    primitiveObsessedClasses.add(c);
+                    primitiveObsessedClasses.add(c.getClassName());
                 }
-                primitiveObsessionVarNumber.put(c, numberOfPrimitives);
+                primitiveObsessionVarNumber.put(c.getClassName(), numberOfPrimitives);
             }
         }
-
-        return primitiveObsessedClasses;
     }
 }

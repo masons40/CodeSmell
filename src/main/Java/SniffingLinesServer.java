@@ -2,9 +2,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import files.*;
 import management.FileTransfer;
 import smells.GeneralOverview;
@@ -19,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @MultipartConfig
@@ -35,6 +34,7 @@ public class SniffingLinesServer extends HttpServlet {
         javaFilePath = fileTransfer.getJavaFilePath();
         //companyFilePath = fileTransfer.getCompanyFilePath();
         DataCollection dc = new DataCollection();
+        String companyName = fileTransfer.getCompanyName();
 
         ArrayList<SLFile> files = new ArrayList<>();
 
@@ -98,15 +98,19 @@ public class SniffingLinesServer extends HttpServlet {
 //            }
 //            response.getWriter().println("Number of comments:" + file.getCommentCount());
         }
-        GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
+        GeneralOverview go = new GeneralOverview(files, companyName, javaFileNames);
         GodClasses gc = new GodClasses(files);
-        Gson gson = new Gson();
         PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
-        //response.getWriter().println(primitiveObsession);
+        HashMap<String, Object> objects = new HashMap<>();
+        objects.put("GeneralOverview", go);
+        objects.put("GodClass", gc);
+        objects.put("PrimitiveObsession", primitiveObsession);
+
+        Gson gson = new Gson();
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        request.setAttribute("jsonData",gson.toJson(primitiveObsession));
+        request.setAttribute("jsonData",gson.toJson(objects));
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
