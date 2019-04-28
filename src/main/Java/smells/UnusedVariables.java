@@ -3,12 +3,20 @@ package smells;
 import files.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UnusedVariables {
+    private ArrayList<SLFile> files = new ArrayList<>();
+    private HashMap<SLVariable, SLClass> unusedVariableClasses = new HashMap<>();
+    private ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+    private int numberOfUnusedVariables = 0;
 
-    public ArrayList<SLVariable> findUnusedFieldVariables(ArrayList<SLFile> files) {
-        ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+    public UnusedVariables(ArrayList<SLFile> files){
+        this.files = files;
+        findUnusedFieldVariables();
+    }
 
+    public ArrayList<SLVariable> findUnusedFieldVariables() {
         ArrayList<SLVariable> remove = new ArrayList<>();
 
         for (SLFile f: files) {
@@ -29,8 +37,19 @@ public class UnusedVariables {
 
         unusedVariables.removeAll(remove);
 
-        return unusedVariables;
+        for (SLVariable variable : unusedVariables) {
+            for (SLFile file :files) {
+                for (SLClass clazz : file.getClasses()) {
+                    if(clazz.getMethods().contains(variable)){
+                        unusedVariableClasses.put(variable,clazz);
+                    }
+                }
+            }
+        }
 
+        numberOfUnusedVariables = 0;
+
+        return unusedVariables;
     }
 
     public boolean isUsed(String line, String variableName) {
