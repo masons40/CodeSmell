@@ -9,7 +9,6 @@ public class VariableDetector {
     private String accessorsRegex = "(public|private|protected|static|final|native|synchronized|abstract|transient)";
     HashMap<String, Boolean> variableMap = new HashMap<>();
     int numberOfVariables = 0;
-    int numberOfPrimitives = 0;
 
     private ArrayList<SLVariable> variableList = new ArrayList<>();
 
@@ -20,9 +19,6 @@ public class VariableDetector {
             variableList.add(new SLVariable(findScope(lineSplit), findType(lineSplit),findName(lineSplit)));
             variableMap.put(findName(lineSplit), false);
             numberOfVariables++;
-            if (findType(lineSplit).matches(dataTypeRegex)) {
-                numberOfPrimitives++;
-            }
         }
 
         isUsed(line);
@@ -125,7 +121,4 @@ public class VariableDetector {
         return numberOfVariables;
     }
 
-    public int getNumberOfPrimitives() {
-        return numberOfPrimitives;
-    }
 }
