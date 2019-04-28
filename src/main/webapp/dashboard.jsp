@@ -54,7 +54,7 @@
         </div>
 
         <main id="main-content">
-            <div id="json-data" style="display:none;" ><%= request.getAttribute("myname") %></div>
+            <div id="json-data"><%= request.getAttribute("jsonData") %></div>
             <div class="item-box">
                 
                 <div class="title-box">

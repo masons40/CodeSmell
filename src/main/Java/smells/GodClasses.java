@@ -5,6 +5,7 @@ import files.SLMethod;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
 A God Class is a class which either knows or does too much
@@ -13,14 +14,15 @@ this. We will try to detect this by looking at the number of lines and the numbe
 of methods in the class
  */
 public class GodClasses {
-    private ArrayList<SLFile> files;
+    private transient ArrayList<SLFile> files;
     private int numberOfGodClasses = 0;
-    private int averageGodScore = 0;
-    private ArrayList<SLClass> godClasses = new ArrayList<>();
-    private ArrayList<Double> godScores = new ArrayList<>();
+    private double averageGodScore = 0;
+    private ArrayList<String> godClasses = new ArrayList<>();
+    private HashMap<String, Double> godScores = new HashMap<>();
 
-    public GodClasses(ArrayList<SLFile> files){
+    public GodClasses(ArrayList<SLFile> files) throws IOException {
         this.files = files;
+        findGodClasses();
     }
 
     /*
@@ -28,17 +30,20 @@ public class GodClasses {
     then compare the god score of each class to the average and if
     it has a score greater than 2 and a half time the average
      */
-    public ArrayList<SLClass> findGodClasses() throws IOException {
+    public ArrayList<String> findGodClasses() throws IOException {
+        double numberOfClasses=0.0;
+
         for (SLFile slFile: files) {
             ArrayList<SLClass> classes = slFile.getClasses();
             for (SLClass clazz : classes) {
                 int numLines = getNumOfFileLines(clazz);
                 int numMethods = clazz.getMethods().size();                  //change in future
                 averageGodScore += calculateGodScore(numLines, numMethods);
+                numberOfClasses++;
             }
         }
 
-        averageGodScore = averageGodScore/files.size();
+        averageGodScore /= numberOfClasses;
 
         for (SLFile slFile:files) {
             ArrayList<SLClass> classes = slFile.getClasses();
@@ -46,8 +51,9 @@ public class GodClasses {
                 int numLines = getNumOfFileLines(clazz);
                 int numMethods = clazz.getMethods().size();                   //change in future
                 double godScore = calculateGodScore(numLines, numMethods);
+                godScores.put(clazz.getClassName(),godScore);
                 if ((godScore >= (3.5 * averageGodScore)) || (numLines > 700)) {
-                    godClasses.add(clazz);
+                    godClasses.add(clazz.getClassName());
                 }
             }
         }

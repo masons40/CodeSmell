@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import files.*;
 import management.FileTransfer;
 import smells.GeneralOverview;
+import smells.GodClasses;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -97,17 +98,13 @@ public class SniffingLinesServer extends HttpServlet {
 //            response.getWriter().println("Number of comments:" + file.getCommentCount());
         }
         GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
+        GodClasses gc = new GodClasses(files);
+        Gson gson = new Gson();
 
-        Gson gson;
-        try (Writer writer = new FileWriter("C:\\Users\\mason\\IdeaProjects\\SniffingLines\\CodeSmell\\target\\sniffingLines\\resources\\files\\asd\\Output.json")) {
-            gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-            gson.toJson(go, writer);
-        }
-
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        request.setAttribute("myname",gson.toJson(go));
-//        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        request.setAttribute("jsonData",gson.toJson(gc));
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
