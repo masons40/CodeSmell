@@ -10,6 +10,7 @@ import management.FileTransfer;
 import smells.GeneralOverview;
 import smells.GodClasses;
 import smells.PrimitiveObsession;
+import smells.UnusedVariables;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -104,10 +105,21 @@ public class SniffingLinesServer extends HttpServlet {
         PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
         //response.getWriter().println(primitiveObsession);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        request.setAttribute("jsonData",gson.toJson(primitiveObsession));
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+//        for (SLFile f: files) {
+//            response.getWriter().println(f.getName());
+//            for (SLMethod m: f.getMethods()) {
+//                response.getWriter().println(m.getName());
+//                response.getWriter().println(m.findMethodVariables());
+//            }
+//        }
+
+//        UnusedVariables unusedVariables = new UnusedVariables();
+//        response.getWriter().println(unusedVariables.findUnusedFieldVariables(files, response));
+
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        request.setAttribute("jsonData",gson.toJson(primitiveObsession));
+//        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

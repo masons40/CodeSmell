@@ -1,43 +1,57 @@
 package smells;
 
-import files.SLClass;
-import files.SLFile;
-import files.SLMethod;
-import files.SLVariable;
+import files.*;
 
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class UnusedVariables {
 
-    public HashMap<SLVariable, Boolean> findVariableUsage(SLFile file, HashMap<SLVariable, Boolean> variableUsage) {
-        for (SLClass clazz: file.getClasses()) {
-            //get field variables here
-            for (SLMethod method:clazz.getMethods()) {
-                for (String line : method.getMethodBody()) {
-                    for (SLVariable var: variableUsage.keySet()) {
-                        variableUsage.put(var, isUsed(line, var.getName()));
+    public ArrayList<SLVariable> findUnusedFieldVariables(ArrayList<SLFile> files, HttpServletResponse response) throws IOException {
+        ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+
+        for (SLFile f: files) {
+            for (SLClass c: f.getClasses()) {
+                 unusedVariables.addAll(c.getVariables());
+            }
+        }
+
+        ArrayList<SLVariable> remove = new ArrayList<>();
+
+        for (SLFile f: files) {
+            for (SLClass c: f.getClasses()) {
+                for (SLMethod m: c.getMethods()) {
+                    unusedVariables.addAll(m.findMethodVariables());
+                    for (String line: m.getMethodBody()) {
+                        for (SLVariable var: unusedVariables) {
+                            if (isUsed(line, var.getName())) {
+                                remove.add(var);
+                            }
+                        }
                     }
                 }
             }
         }
 
-        return variableUsage;
+        unusedVariables.removeAll(remove);
+
+        return unusedVariables;
+
     }
 
-    public boolean isUsed(String line, String variableName) {
+    public boolean isUsed(String line, String variableName) throws IOException {
         String[] lineSplitUp = line.split("\\s+");
         String lineNoSpaces = line.replaceAll("\\s+", "");
 
+        VariableDetector detector = new VariableDetector();
+
         if (lineNoSpaces.matches(".*([^[a-zA-Z]]|\\s*)"+variableName+"[^[a-zA-Z0-9]].*") &&
-                (!isVariableDeclaration(line, variableName) || !variableName.equals(findVariableName(lineSplitUp)))) {
+                (!detector.isVariable(line) || !variableName.equals(findVariableName(lineSplitUp)))) {
             return true;
         }
 
         return false;
-    }
-
-    private boolean isVariableDeclaration(String line, String variable) {
-        return line.matches(".*+"+variable+".*=.*");
     }
 
     private String findVariableName(String[] lineSplit) {

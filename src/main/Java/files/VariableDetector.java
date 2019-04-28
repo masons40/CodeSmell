@@ -7,24 +7,24 @@ public class VariableDetector {
 
     private String dataTypeRegex = "(byte|short|int|long|float|double|boolean|char|String)";
     private String accessorsRegex = "(public|private|protected|static|final|native|synchronized|abstract|transient)";
-    HashMap<String, Boolean> variableMap = new HashMap<>();
-    int numberOfVariables = 0;
-
     private ArrayList<SLVariable> variableList = new ArrayList<>();
 
-    public void checkForVariables(String line) {
+    public ArrayList<SLVariable> checkForVariables(String line) {
         String[] lineSplit =line.split("\\s+");
 
         if (isVariable(line)){
-            variableList.add(new SLVariable(findScope(lineSplit), findType(lineSplit),findName(lineSplit)));
-            variableMap.put(findName(lineSplit), false);
-            numberOfVariables++;
+            String variableName = findName(lineSplit);
+            String variableType = findType(lineSplit, variableName);
+            String variableScope = findScope(lineSplit);
+
+            SLVariable var = new SLVariable(variableScope, variableType, variableName);
+            variableList.add(var);
         }
 
-        isUsed(line);
+        return variableList;
     }
 
-    private boolean isVariable(String line) {
+    public boolean isVariable(String line) {
         line = line.replaceAll("\\s+", "");
 
         if (line.matches(dataTypeRegex+".*")) {
@@ -34,6 +34,8 @@ public class VariableDetector {
                 return false; //is a poorly declared method without the scope defined
             }
         } else if (line.matches(".*=new.*")) {
+            return true;
+        } else if (line.matches(("(.*)(\\[(.*)])(.*)=(.*)"))) {
             return true;
         } else if (line.matches(accessorsRegex+".*")) {
             if (line.contains("=") || line.contains(";")) {
@@ -58,12 +60,16 @@ public class VariableDetector {
         return scope;
     }
 
-    private String findType(String[] lineSplit) {
+    private String findType(String[] lineSplit, String variableName) {
         String type = "";
 
         for (int i=0; i<lineSplit.length; i++) {
-            if (lineSplit[i].matches(dataTypeRegex)) {
-                type = lineSplit[i];
+            if (lineSplit[i].matches(variableName+"(.*)")) {
+                if (lineSplit[i-1].endsWith(">") && !lineSplit[i-1].contains("<")) {
+                    type = lineSplit[i-2]+" "+lineSplit[i-1];
+                } else {
+                    type = lineSplit[i - 1];
+                }
             }
         }
 
@@ -99,26 +105,10 @@ public class VariableDetector {
         return name;
     }
 
-    public boolean isUsed(String line) {
-        String[] lineSplitUp = line.split("\\s+");
-        String lineNoSpaces = line.replaceAll("\\s+", "");
-
-        for (String key: variableMap.keySet()) {
-            if (lineNoSpaces.matches(".*([^[a-zA-Z]]|\\s*)"+key+"[^[a-zA-Z0-9]].*") &&
-                    (!isVariable(line) || !key.equals(findName(lineSplitUp)))) {
-                variableMap.put(key, true);
-            }
-        }
-
-        return false;
-    }
 
     public ArrayList<SLVariable> getVariableList(){
         return variableList;
     }
 
-    public int getNumberOfVariables() {
-        return numberOfVariables;
-    }
 
 }
