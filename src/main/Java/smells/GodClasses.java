@@ -1,8 +1,8 @@
 package smells;
 import files.SLClass;
 import files.SLFile;
+import files.SLMethod;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -13,12 +13,14 @@ this. We will try to detect this by looking at the number of lines and the numbe
 of methods in the class
  */
 public class GodClasses {
-    ArrayList<SLFile> files;
+    private ArrayList<SLFile> files;
+    private int numberOfGodClasses = 0;
+    private int averageGodScore = 0;
+    private ArrayList<SLClass> godClasses = new ArrayList<>();
+    private ArrayList<Double> godScores = new ArrayList<>();
 
-    public GodClasses(ArrayList<SLFile> files, HttpServletResponse response) throws IOException {
-        //response.getWriter().println("entered constructor");
+    public GodClasses(ArrayList<SLFile> files){
         this.files = files;
-        //response.getWriter().println("exiting constructor");
     }
 
     /*
@@ -26,33 +28,31 @@ public class GodClasses {
     then compare the god score of each class to the average and if
     it has a score greater than 2 and a half time the average
      */
-    public ArrayList<SLFile> findGodClasses(String javaFilePath) throws IOException {
-        ArrayList<SLFile> godClasses = new ArrayList<>();
-
-        double avgGodScore = 0;
-
-        for (SLFile clazz: files) {
-            File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
-            int numLines = getNumOfFileLines(file);
-
-            int numMethods = clazz.getMethods().size();                   //change in future
-            avgGodScore += calculateGodScore(numLines, numMethods);
-        }
-
-        avgGodScore = avgGodScore/files.size();
-
-        for (SLFile clazz:files) {
-
-            File file = new File(javaFilePath + File.separator + clazz.getName() + ".java");
-            int numLines = getNumOfFileLines(file);
-
-            int numMethods = clazz.getMethods().size();                   //change in future
-            double godScore = calculateGodScore(numLines, numMethods);
-
-            if ((godScore >= (3.5 * avgGodScore)) || (numLines>400)) {
-                godClasses.add(clazz);
+    public ArrayList<SLClass> findGodClasses() throws IOException {
+        for (SLFile slFile: files) {
+            ArrayList<SLClass> classes = slFile.getClasses();
+            for (SLClass clazz : classes) {
+                int numLines = getNumOfFileLines(clazz);
+                int numMethods = clazz.getMethods().size();                  //change in future
+                averageGodScore += calculateGodScore(numLines, numMethods);
             }
         }
+
+        averageGodScore = averageGodScore/files.size();
+
+        for (SLFile slFile:files) {
+            ArrayList<SLClass> classes = slFile.getClasses();
+            for (SLClass clazz : classes) {
+                int numLines = getNumOfFileLines(clazz);
+                int numMethods = clazz.getMethods().size();                   //change in future
+                double godScore = calculateGodScore(numLines, numMethods);
+                if ((godScore >= (3.5 * averageGodScore)) || (numLines > 700)) {
+                    godClasses.add(clazz);
+                }
+            }
+        }
+
+        numberOfGodClasses=godClasses.size();
         return godClasses;
     }
 
@@ -61,57 +61,13 @@ public class GodClasses {
         return (numOfLines*0.1)+(numOfMethods*0.7);
     }
 
-    private static int getNumOfFileLines(File file) throws IOException {
-        if(file.exists()){
-            FileReader fr = new FileReader(file);
-            LineNumberReader lnr = new LineNumberReader(fr);
+    private static int getNumOfFileLines(SLClass clazz){
+        int numOfLines = 0;
 
-            int numLines=0;
-            String line;
-
-            while ((line = lnr.readLine()) != null){
-                //if(line.matches(".*[^[\\s]].*")) {
-                    numLines++;
-                //}
-            }
-
-            lnr.close();
-            return numLines;
+        for (SLMethod method : clazz.getMethods()) {
+            numOfLines+=method.getMethodBody().size();
         }
-        else{
-            //System.out.println("File does not exist");
-            return 0;
-        }
+
+        return numOfLines;
     }
-
-    /*
-    If an object is Tightly Coupled it is reliant too much on different objects.
-    A god class would be tightly coupled as having access to too much data fits part of the definition
-    of a god class, metrics might include methods used from other classes, number of objects of other
-    classes in the class
-     */
-    /*private boolean isTightlyCoupled(SLClass clss) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("/Users/markhartnett/Documents/CodeSnifferPractice/src/"+clss.getName()));
-        String tempLine;
-        int outsideMethodCalls = 0;
-
-        ArrayList<Method> allMethods = new ArrayList<>();
-        for (SLClass clazz: classes) {
-            if(cls!=clazz) {
-                allMethods.addAll(cls.getMethods());
-            }
-        }
-
-        //search through the class itself and see how many outside methods are called
-        while ((tempLine = br.readLine()) != null){
-            for (Method method: allMethods) {
-                if (tempLine.contains(method.getName() + "(")) {
-                    outsideMethodCalls++;
-                }
-            }
-        }
-
-        return outsideMethodCalls>10;
-    }*/
-
 }

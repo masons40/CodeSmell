@@ -57,6 +57,7 @@ public class SLClass {
     }
 
     public ArrayList<SLVariable> getVariables(){
+
         return variables;
     }
 

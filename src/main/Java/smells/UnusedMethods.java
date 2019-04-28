@@ -2,33 +2,55 @@ package smells;
 
 import files.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnusedMethods {
+    private ArrayList<SLFile> files = new ArrayList<>();
+    private HashMap<SLMethod, Integer> methodUsage = new HashMap<>();
+    private ArrayList<SLMethod> unusedMethods = new ArrayList<>();
+    private int numberOfUnusedMethods = 0;
 
-    //Method takes in a hash map of methods to integer where integer value is the number of times a method has been used
-    public HashMap<SLMethod, Integer> findMethodUsage(File file, HashMap<SLMethod, Integer> methodUsage) throws Exception {
-        BufferedReader br1 = new BufferedReader(new FileReader(file));
-        BufferedReader br2 = new BufferedReader(new FileReader(file));
+    public UnusedMethods(ArrayList<SLFile> files){
+        this.files = files;
+    }
 
-        String firstLine;
-        String secondLine = br2.readLine();
+    //Method returns an array  list of methods that have not been used in the
+    public ArrayList<SLMethod> findUnusedMethods(){
+        for (SLFile slFile:files) {
+            for(SLMethod method : slFile.getMethods()) {
+                methodUsage.put(method,0);
+            }
+        }
 
-        while ((firstLine = br1.readLine()) != null) {
-            secondLine = br2.readLine();
-            //for each method in the hashmap if that method is used in the file increment its use integer
-            for (SLMethod method:methodUsage.keySet()) {
-                if(firstLine.contains(method.getName()+"(") && !MethodDetector.isMethodDeclaration(firstLine,secondLine)){
+        ArrayList<String> fileCode = new ArrayList<>();
+
+        //adds each line of code from each method to an arrayList of strings
+        for (SLMethod method : methodUsage.keySet()) {
+            fileCode.addAll(method.getMethodBody());
+        }
+
+        //for each line of code we need to check if a method is called in the line
+        for (String line : fileCode) {
+            for (SLMethod method : methodUsage.keySet()) {
+                if(line.contains(method.getName() + "(")){
                     int count = methodUsage.get(method);
                     count++;
-                    methodUsage.put(method,count);
+                    methodUsage.put(method, count);
                 }
             }
         }
-        return methodUsage;
+
+        //add all unused methods to an arrayList
+        for (SLMethod method : methodUsage.keySet()) {
+            if(methodUsage.get(method)==0){
+                unusedMethods.add(method);
+            }
+        }
+
+        numberOfUnusedMethods = unusedMethods.size();
+
+        return unusedMethods;
     }
 
 }
