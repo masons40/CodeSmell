@@ -9,6 +9,7 @@ import files.*;
 import management.FileTransfer;
 import smells.GeneralOverview;
 import smells.GodClasses;
+import smells.PrimitiveObsession;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -69,14 +70,14 @@ public class SniffingLinesServer extends HttpServlet {
             dc.clearAll();
         }
         for(SLFile file: files){
-            for(SLClass e: file.getClasses()){
-                response.getWriter().println("Class Methods");
-                for(SLMethod m: e.getMethods()){
-                    response.getWriter().println(m.toString());
-                    response.getWriter().println("Does the method contains variables(size):" + m.getVariables().size());
-                    response.getWriter().println(m.methBody());
-                }
-            }
+//            for(SLClass e: file.getClasses()){
+//                response.getWriter().println("Class Methods");
+//                for(SLMethod m: e.getMethods()){
+//                    response.getWriter().println(m.toString());
+//                    response.getWriter().println("Does the method contains variables(size):" + m.getVariables().size());
+//                    response.getWriter().println(m.methBody());
+//                }
+//            }
 //            response.getWriter().println("Methods");
 //            for(SLMethod e: file.getMethods()){
 //                response.getWriter().println(e.toString());
@@ -100,10 +101,12 @@ public class SniffingLinesServer extends HttpServlet {
         GeneralOverview go = new GeneralOverview(files, "tester", javaFileNames);
         GodClasses gc = new GodClasses(files);
         Gson gson = new Gson();
+        PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
+        //response.getWriter().println(primitiveObsession);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        request.setAttribute("jsonData",gson.toJson(gc));
+        request.setAttribute("jsonData",gson.toJson(primitiveObsession));
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
