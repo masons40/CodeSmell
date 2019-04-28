@@ -19,7 +19,7 @@ public class BloatedMethods {
         for (SLFile slFile : files) {
             for (SLClass clazz : slFile.getClasses()) {
                 for (SLMethod method: clazz.getMethods()) {
-                    if (method.getMethodBody().size()>150) {
+                    if (method.getMethodBody().size()>200) {
                         bloatedMethods.add(method);
                     }
                 }
