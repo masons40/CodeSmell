@@ -63,7 +63,7 @@
 
                 </div>
                 <div id="form-button">
-                    <button class="btn " type="submit">Smell</button>
+                    <button class="btn" type="submit" id="data-collection-button">Smell</button>
                 </div>
             </form>
         </div>

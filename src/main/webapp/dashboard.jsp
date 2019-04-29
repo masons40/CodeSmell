@@ -28,33 +28,33 @@
                 <h2>Sniffing<br>Lines</h2>
             </a>
         
-            <div id="navigation-box">
-                <a href="">
-                    <h3 id="overview">Overview</h3>
-                </a>
-                <a href="">
-                    <h3 id="unused-code">Unused Methods</h3>
-                </a>
-                <a href="">
-                    <h3 id="unnamed-literals">Unused Variables</h3>
-                </a>
-                <a href="">
-                    <h3 id="over-nesting">Over nesting</h3>
-                </a>
-                <a href="">
-                    <h3 id="message-chaining">Message Chaining</h3>
-                </a>
-                <a href="">
-                    <h3 id="unused-E-I">Unused Enums/Interfaces</h3>
-                </a>
-                <a href="">
-                    <h3 id="feature-envy">Feature envy</h3>
-                </a>
-                <a href="">
-                    <h3 id="god-class">God Class</h3>
-                </a>
-            
-            </div>
+            <%--<div id="navigation-box">--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="overview">Overview</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="unused-code">Unused Methods</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="unnamed-literals">Unused Variables</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="over-nesting">Over nesting</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="message-chaining">Message Chaining</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="unused-E-I">Unused Enums/Interfaces</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="feature-envy">Feature envy</h3>--%>
+                <%--</a>--%>
+                <%--<a href="">--%>
+                    <%--<h3 id="god-class">God Class</h3>--%>
+                <%--</a>--%>
+            <%----%>
+            <%--</div>--%>
         </div>
 
         <main id="main-content">
@@ -260,7 +260,18 @@
                         the class suffers from primitive obsession.
                     </div>
                 </div>
-                
+
+
+                <div class="content" >
+
+                    <div class="title-box">
+                        <h2 id="">Data to be Displayed in the future</h2>
+                    </div>
+
+                    <div id="future">
+
+                    </div>
+                </div>
             </div>
 
             

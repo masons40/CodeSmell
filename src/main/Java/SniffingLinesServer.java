@@ -101,12 +101,16 @@ public class SniffingLinesServer extends HttpServlet {
         PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
         UnusedMethods um = new UnusedMethods(files);
         UnusedVariables uv = new UnusedVariables(files);
+        BloatedMethods bm = new BloatedMethods(files);
+        ArrowHead ah = new ArrowHead(files);
         HashMap<String, Object> objects = new HashMap<>();
         objects.put("GeneralOverview", go);
         objects.put("GodClass", gc);
         objects.put("PrimitiveObsession", primitiveObsession);
         objects.put("UnusedMethods", um);
         objects.put("UnusedVariables", uv);
+        objects.put("BloatedMethods", bm);
+        objects.put("ArrowHead", ah);
 
         Gson gson = new Gson();
 

@@ -15,15 +15,17 @@ import java.util.regex.Pattern;
 
 public class ArrowHead {
 
-	String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
-	private int currLine;
-	private boolean smellPresent = false;
+	private transient String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
+	private transient int currLine;
+	private  boolean smellPresent = false;
+	private HashMap<String, Integer> ArrowHeadSmells = new HashMap<>();
 
-	public ArrowHead() {}
+	public ArrowHead(ArrayList<SLFile> files) {
+		getArrowHeads(files);
+	}
 
 	public HashMap<String, Integer> getArrowHeads(ArrayList<SLFile> files){
 		String line = "";
-		HashMap<String, Integer> ArrowHeadSmells = new HashMap<>(); //Condition -> Max Conditional Depth
 		for(SLFile f : files) {
 			for (SLClass clazz : f.getClasses()) {
 				for (SLMethod m : clazz.getMethods()) {

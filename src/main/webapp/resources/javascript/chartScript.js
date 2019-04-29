@@ -65,6 +65,9 @@ $("document").ready(function() {
         table.innerHTML += '<div class="overview-table-data">'+obj.GeneralOverview.filenames[i]+'</div>';
     }
 
+    document.getElementById('future').innerText = "The Bloated methods section:" +
+        obj.BloatedMethods.stringify() + "\nArrow Head" + obj.ArrowHead.stringify();
+
     // var randomScalingFactor = function() {
     //     return Math.round(Math.random() * 100);
     // };
@@ -218,7 +221,7 @@ $("document").ready(function() {
             2]);
 
         var options = {
-            title: "Number of unused methods per class",
+            title: "Number of unused variables per class",
             bar: {groupWidth: "95%"},
             legend: { position: "none" },
         };
@@ -248,7 +251,7 @@ $("document").ready(function() {
             2]);
 
         var options = {
-            title: "Number of unused methods per class",
+            title: "Amount of Primitive Obsession per class",
             bar: {groupWidth: "95%"},
             legend: { position: "none" },
         };
