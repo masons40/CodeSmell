@@ -21,21 +21,20 @@ public class UnusedVariables {
 
         for (SLFile f: files) {
             for (SLClass c: f.getClasses()) {
-                unusedVariables.addAll(c.getVariables());
+                ArrayList<SLVariable> classVars = c.getVariables();
                 for (SLMethod m: c.getMethods()) {
-                    unusedVariables.addAll(m.findMethodVariables());
                     for (String line: m.getMethodBody()) {
-                        for (SLVariable var: unusedVariables) {
+                        for (SLVariable var: classVars) {
                             if (isUsed(line, var.getName())) {
                                 remove.add(var);
                             }
                         }
                     }
                 }
+                classVars.removeAll(remove);
+                unusedVariables.addAll(classVars);
             }
         }
-
-        unusedVariables.removeAll(remove);
 
         for (SLVariable variable : unusedVariables) {
             for (SLFile file :files) {
@@ -47,7 +46,7 @@ public class UnusedVariables {
             }
         }
 
-        numberOfUnusedVariables = 0;
+        numberOfUnusedVariables = unusedVariables.size();
 
         return unusedVariables;
     }
