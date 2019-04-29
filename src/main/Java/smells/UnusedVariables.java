@@ -9,6 +9,7 @@ public class UnusedVariables {
     private transient ArrayList<SLFile> files = new ArrayList<>();
     private HashMap<String, String> unusedVariableClasses = new HashMap<>();
     private transient ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+    private HashMap<String, Integer> unusedVariablesPerClass = new HashMap<>();
     private int numberOfUnusedVariables = 0;
 
     public UnusedVariables(ArrayList<SLFile> files){
@@ -45,6 +46,15 @@ public class UnusedVariables {
                         }
                     }
                 }
+            }
+        }
+
+        for (SLVariable var: unusedVariables) {
+            String clazz = unusedVariableClasses.get(var.getName());
+            if (unusedVariablesPerClass.containsKey(clazz)) {
+                unusedVariablesPerClass.put(clazz, unusedVariablesPerClass.get(clazz)+1);
+            } else {
+                unusedVariablesPerClass.put(clazz, 1);
             }
         }
 
