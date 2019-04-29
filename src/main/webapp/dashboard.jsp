@@ -183,10 +183,10 @@
                         </div>
 
                         <div id="unusedV-class-found">
-                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">Unused Method Data</h2>
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">Unused Variables Data</h2>
                             <div class="unusedM-info">
                                 <h1 id="unusedV-found">45</h1>
-                                <h2>AMOUNT OF UNUSED METHODS FOUND</h2>
+                                <h2>AMOUNT OF UNUSED VARIABLES FOUND</h2>
                             </div>
                         </div>
                     </div>
