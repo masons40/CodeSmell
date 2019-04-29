@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class BloatedMethods {
     private ArrayList<SLFile> files = new ArrayList<>();
     private int numberOfBloatedMethods = 0;
+    private boolean smellPresent = false;
 
     public BloatedMethods(ArrayList<SLFile> files){
         this.files=files;
@@ -27,6 +28,11 @@ public class BloatedMethods {
         }
 
         numberOfBloatedMethods = bloatedMethods.size();
+
+        if (bloatedMethods.size()>0) {
+            smellPresent = true;
+        }
+
         return bloatedMethods;
     }
 

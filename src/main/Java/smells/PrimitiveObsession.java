@@ -12,6 +12,7 @@ public class PrimitiveObsession {
     private transient String primitivesRegex = "(byte|short|int|long|float|double|boolean|char)";
     private HashMap<String, Integer> primitiveObsessionVarNumber = new HashMap<>();
     private ArrayList<String> primitiveObsessedClasses = new ArrayList<>();
+    private boolean smellPresent = false;
 
     public PrimitiveObsession(ArrayList<SLFile> files) {
         findPrimitiveClasses(files);
@@ -34,6 +35,7 @@ public class PrimitiveObsession {
         double percentage = numPrimitives/numVariable;
 
         if (numberOfPrimitiveVars >= 5 && percentage >= 0.5) {
+            smellPresent = true;
             return true;
         } else {
             return false;

@@ -12,6 +12,7 @@ public class UnusedMethods {
     private transient ArrayList<SLMethod> unusedMethods = new ArrayList<>();
     private HashMap<String, Integer> unusedMethodsPerClass = new HashMap<>();
     private int numberOfUnusedMethods = 0;
+    private boolean smellPresent = false;
 
     public UnusedMethods(ArrayList<SLFile> files){
         this.files = files;
@@ -71,6 +72,10 @@ public class UnusedMethods {
 
 
         numberOfUnusedMethods = unusedMethods.size();
+
+        if (unusedMethods.size()>0) {
+            smellPresent = true;
+        }
 
         return unusedMethods;
     }

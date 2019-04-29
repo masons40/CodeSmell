@@ -11,6 +11,7 @@ public class UnusedVariables {
     private transient ArrayList<SLVariable> unusedVariables = new ArrayList<>();
     private HashMap<String, Integer> unusedVariablesPerClass = new HashMap<>();
     private int numberOfUnusedVariables = 0;
+    private boolean smellPresent = false;
 
     public UnusedVariables(ArrayList<SLFile> files){
         this.files = files;
@@ -59,6 +60,10 @@ public class UnusedVariables {
         }
 
         numberOfUnusedVariables = unusedVariables.size();
+
+        if (unusedVariables.size()>0) {
+            smellPresent = true;
+        }
 
         return unusedVariables;
     }

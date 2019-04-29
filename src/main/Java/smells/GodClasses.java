@@ -20,6 +20,7 @@ public class GodClasses {
     private ArrayList<String> godClasses = new ArrayList<>();
     private ArrayList<String> nongodClasses = new ArrayList<>();
     private HashMap<String, Double> godScores = new HashMap<>();
+    private boolean smellPresent = false;
 
     public GodClasses(ArrayList<SLFile> files) throws IOException {
         this.files = files;
@@ -60,6 +61,11 @@ public class GodClasses {
         }
 
         numberOfGodClasses=godClasses.size();
+
+        if (godClasses.size()>0) {
+            smellPresent = true;
+        }
+
         return godClasses;
     }
 
