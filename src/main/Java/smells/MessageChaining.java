@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageChaining {
+	private boolean smellPresent = false;
 
 	public MessageChaining(){
 	}
@@ -42,8 +43,8 @@ public class MessageChaining {
 					}
 				}
 			}
-
 		}
+		smellPresent = messageChains.size()>0;
 		return messageChains;
 	}
 

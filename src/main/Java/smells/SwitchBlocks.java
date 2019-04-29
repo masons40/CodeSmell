@@ -18,6 +18,7 @@ public class SwitchBlocks{
 
 	private HashMap<String, Integer> switchBlocks = new HashMap<>();
 	private String caseRegex = String.format("case|default");
+	private boolean smellPresent = false;
 
 	public SwitchBlocks(){
 	}
@@ -63,7 +64,7 @@ public class SwitchBlocks{
 				}
 			}
 		}
-
+		smellPresent = switchBlocks.size()>0;
 		return  switchBlocks;
 	}
 

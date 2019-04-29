@@ -17,6 +17,7 @@ public class ArrowHead {
 
 	String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
 	private int currLine;
+	private boolean smellPresent = false;
 
 	public ArrowHead() {}
 
@@ -41,6 +42,7 @@ public class ArrowHead {
 				}
 			}
 		}
+		smellPresent = ArrowHeadSmells.size()>1;
 		return ArrowHeadSmells;
 	}
 
