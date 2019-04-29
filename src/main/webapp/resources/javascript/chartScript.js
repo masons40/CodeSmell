@@ -8,13 +8,24 @@ $("document").ready(function() {
     document.getElementById('comments-data').innerText = obj.GeneralOverview.numberOfComments;
     document.getElementById('enum-data').innerText = obj.GeneralOverview.numberOfEnums;
     document.getElementById('interface-data').innerText = obj.GeneralOverview.numberOfInterfaces;
+
     document.getElementById('overview-title').innerText = "General Overview of "+obj.GeneralOverview.companyName;
-    console.log(data);
+    document.getElementById('godclass-heading').innerText = "God Classes in "+obj.GeneralOverview.companyName;
+    document.getElementById('unusedM-heading').innerText = "Unused Methods in "+obj.GeneralOverview.companyName;
+    document.getElementById('unusedV-heading').innerText = "Unused Variables in "+obj.GeneralOverview.companyName;
+    document.getElementById('PO-heading').innerText = "Primitive Variables in "+obj.GeneralOverview.companyName;
+
+
+    document.getElementById('god-avg').innerText = obj.GodClass.averageGodScore;
+    document.getElementById('god-found').innerText = obj.GodClass.numberOfGodClasses;
+    console.log(obj);
+
 
     var table = document.getElementById('overview-table');
     for(var i=0;i<obj.GeneralOverview.filenames.length;i++) {
         table.innerHTML += '<div class="overview-table-data">'+obj.GeneralOverview.filenames[i]+'</div>';
     }
+
     // var randomScalingFactor = function() {
     //     return Math.round(Math.random() * 100);
     // };
@@ -80,82 +91,137 @@ $("document").ready(function() {
     google.charts.load('current', {'packages':['treemap']});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
-            ['Global',    null,                 0,                               0],
-            ['America',   'Global',             0,                               0],
-            ['Europe',    'Global',             0,                               0],
-            ['Asia',      'Global',             0,                               0],
-            ['Australia', 'Global',             0,                               0],
-            ['Africa',    'Global',             0,                               0],
-            ['Brazil',    'America',            11,                              10],
-            ['USA',       'America',            52,                              31],
-            ['Mexico',    'America',            24,                              12],
-            ['Canada',    'America',            16,                              -23],
-            ['France',    'Europe',             42,                              -11],
-            ['Germany',   'Europe',             31,                              -2],
-            ['Sweden',    'Europe',             22,                              -13],
-            ['Italy',     'Europe',             17,                              4],
-            ['UK',        'Europe',             21,                              -5],
-            ['China',     'Asia',               36,                              4],
-            ['Japan',     'Asia',               20,                              -12],
-            ['India',     'Asia',               40,                              63],
-            ['Laos',      'Asia',               4,                               34],
-            ['Mongolia',  'Asia',               1,                               -5],
-            ['Israel',    'Asia',               12,                              24],
-            ['Iran',      'Asia',               18,                              13],
-            ['Pakistan',  'Asia',               11,                              -52],
-            ['Egypt',     'Africa',             21,                              0],
-            ['S. Africa', 'Africa',             30,                              43],
-            ['Sudan',     'Africa',             12,                              2],
-            ['Congo',     'Africa',             10,                              12],
-            ['Zaire',     'Africa',             8,                               10]
-        ]);
-
+        var data = google.visualization.arrayToDataTable(getTreeData());
         tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
 
         tree.draw(data, {
-            minColor: '#777777',
-            midColor: 'red',
-            maxColor: 'green',
+            highlightOnMouseOver: true,
+            title: 'Class size comparision',
+            minColor: '#4286f4',
+            midColor: '#6b34c9',
+            maxColor: '#2a0c5e',
             headerHeight: 0,
-            fontColor: 'white',
-            showScale: true
+            fontColor: '#6b34c9',
+            showScale: true,
+            generateTooltip: showFullTooltip
         });
 
+        function showFullTooltip(row, size) {
+            return '<div style="background:#4b81d8;color:white; padding:10px; border-style:solid">' +
+                '<span style="font-family:Courier">' + "Class Name:" +data.getValue(row, 0) + '</span><br>' +
+                data.getColumnLabel(2) +' '
+                + size + ' </div>';
+        }
+    }
+    var godMax =0;
+    function getTreeData(){
+        var data = [['Name', 'God Class Size', 'size', 'color'], ['God Class Size',null,0,0]];
+        var x=0;
+
+        Object.keys(obj.GodClass.godScores).forEach(function(key) {
+            data.push(new Array(String(key),'God Class Size',obj.GodClass.godScores[key],x ));
+            if(godMax<obj.GodClass.godScores[key]){
+                godMax=obj.GodClass.godScores[key];
+            }
+            x+=10;
+        });
+        document.getElementById('god-max').innerText = godMax;
+        return data;
     }
 
+    function getColour(end){
+        var colours = ['#0080FF','#Dff2800','#FFBF00','#FD6A02','#FF0090','#80000','#E0115f','#00A86N'];
+        return colours.splice(0,end);
+    }
 
-    // google.charts.load('current', {'packages':['table']});
-    // google.charts.setOnLoadCallback(drawTable);
-    //
-    // function drawTable() {
-    //     var data = new google.visualization.DataTable();
-    //     data.addColumn('string', 'Name');
-    //     data.addColumn('number', 'Salary');
-    //     data.addColumn('boolean', 'Full Time Employee');
-    //     data.addRows([
-    //         ['Mike',  {v: 10000, f: '$10,000'}, true],
-    //         ['Jim',   {v:8000,   f: '$8,000'},  false],
-    //         ['Alice', {v: 12500, f: '$12,500'}, true],
-    //         ['Bob',   {v: 7000,  f: '$7,000'},  true],
-    //         ['Mike',  {v: 10000, f: '$10,000'}, true],
-    //         ['Jim',   {v:8000,   f: '$8,000'},  false],
-    //         ['Alice', {v: 12500, f: '$12,500'}, true],
-    //         ['Bob',   {v: 7000,  f: '$7,000'},  true],
-    //         ['Alice', {v: 12500, f: '$12,500'}, true],
-    //         ['Bob',   {v: 7000,  f: '$7,000'},  true]
-    //     ]);
-    //
-    //     var table = new google.visualization.Table(document.getElementById('table_div'));
-    //
-    //     table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
-    // }
-    //
-    //
-    // function getColour(end){
-    //     var colours = ['#0080FF','#Dff2800','#FFBF00','#FD6A02','#FF0090','#80000','#E0115f','#00A86N'];
-    //     return colours.splice(0,end);
-    // }
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChartCore);
+    function drawChartCore() {
+        var data = google.visualization.arrayToDataTable(getBarChartData());
 
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            { calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation" },
+            2]);
+
+        var options = {
+            title: "Number of unused methods per class",
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+        chart.draw(view, options);
+    }
+
+    function getBarChartData(){
+        var data = [["Element", "Density", { role: "style" } ]];
+        Object.keys(obj.UnusedMethods.unusedMethodsPerClass).forEach(function(key) {
+            data.push(new Array(String(key),obj.UnusedMethods.unusedMethodsPerClass[key],'#dddefe'));
+        });
+        document.getElementById('unusedM-found').innerText = obj.UnusedMethods.numberOfUnusedMethods;
+        return data;
+    }
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChartCoreV);
+    function drawChartCoreV() {
+        var data = google.visualization.arrayToDataTable(getBarChartVData());
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            { calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation" },
+            2]);
+
+        var options = {
+            title: "Number of unused methods per class",
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values-v"));
+        chart.draw(view, options);
+    }
+    function getBarChartVData(){
+        var data = [["Element", "Density", { role: "style" } ]];
+        Object.keys(obj.UnusedVariables.unusedVariablesPerClass).forEach(function(key) {
+            data.push(new Array(String(key),obj.UnusedVariables.unusedVariablesPerClass[key],'#dddefe'));
+        });
+        document.getElementById('unusedV-found').innerText = obj.UnusedVariables.numberOfUnusedVariables;
+        return data;
+    }
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChartCorePO);
+    function drawChartCorePO() {
+        var data = google.visualization.arrayToDataTable(getBarChartPOData());
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            { calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation" },
+            2]);
+
+        var options = {
+            title: "Number of unused methods per class",
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values-PO"));
+        chart.draw(view, options);
+    }
+    function getBarChartPOData(){
+        var data = [["Element", "Density", { role: "style" } ]];
+        Object.keys(obj.PrimitiveObsession.primitiveObsessionVarNumber).forEach(function(key) {
+            data.push(new Array(String(key),obj.PrimitiveObsession.primitiveObsessionVarNumber[key],'#dddefe'));
+        });
+        document.getElementById('PO-found').innerText = obj.PrimitiveObsession.primitiveObsessedClasses.toString();
+        return data;
+    }
 });

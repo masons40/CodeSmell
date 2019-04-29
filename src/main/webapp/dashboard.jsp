@@ -33,10 +33,10 @@
                     <h3 id="overview">Overview</h3>
                 </a>
                 <a href="">
-                    <h3 id="unused-code">Unused Code</h3>
+                    <h3 id="unused-code">Unused Methods</h3>
                 </a>
                 <a href="">
-                    <h3 id="unnamed-literals">Unnamed Literals</h3>
+                    <h3 id="unnamed-literals">Unused Variables</h3>
                 </a>
                 <a href="">
                     <h3 id="over-nesting">Over nesting</h3>
@@ -64,7 +64,7 @@
                 <div class="content" >
 
                     <div class="title-box">
-                        <h2 id="overview-title">Overview for ASasASa</h2>
+                        <h2 id="overview-title"></h2>
                     </div>
                     <div id="overview-display">
                         <div class="text-box-layout">
@@ -152,11 +152,12 @@
                     <%--<div class="files-found">--%>
                         <%--<h2>Files Found</h2>--%>
                         <%--<div>--%>
-                            <%----%>
+
                         <%--</div>--%>
                     <%--</div>--%>
-                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">Files Detected</h2>
+                    <%--<h2 style="padding: 0 0 0 10px;color: #9c9c9c;">Files Detected</h2>--%>
                     <div id="overview-table">
+
 
                     </div>
                 </div>
@@ -164,7 +165,7 @@
                 <div class="content" >
 
                     <div class="title-box">
-                        <h2>GodClasses for ASAsasasaS</h2>
+                        <h2 id="godclass-heading"></h2>
                     </div>
                     <div id="godclass-display">
                         <div>
@@ -174,28 +175,118 @@
                         </div>
 
                         <div id="god-class-found">
-                            <h2 style="padding: 5px 10px;color: #9c9c9c;">God class Metrics</h2>
-                            <div class="overview-smell">
-                                <h2 class="inline-b general-smell-title">Average God score</h2>
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">God class data</h2>
+                            <div class="god-info">
+                                <h1 id="god-max"></h1>
+                                <h2>MAX</h2>
                             </div>
-                            <div class="overview-smell">
-                                <h2 class="inline-b general-smell-title">File Name:</h2>
+                            <div class="god-info">
+                                <h1 id="god-avg"></h1>
+                                <h2>AVG</h2>
                             </div>
-                            <div class="overview-smell">
-                                <h2 class="inline-b general-smell-title">This classes god score</h2>
+                            <div class="god-info">
+                                <h1 id="god-found"></h1>
+                                <h2>AMOUNT OF GODCLASSES FOUND</h2>
                             </div>
                         </div>
                     </div>
 
                     <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
                     <div id="god-class-table">
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
-                        <div class="overview-table-data">Celsius.java</div>
+                        These are large classes that simply do or know too much.
+                        Our program calculates a “god score”  for each file, which is
+                        essential the weighted sum of of the number of lines
+                        and the number of methods (weights are 0.1 & 0. 7 respectively).
+                    </div>
+                </div>
+
+
+                <div class="content">
+
+                    <div class="title-box">
+                        <h2 id="unusedV-heading"></h2>
+                    </div>
+                    <div id="unusedV-display">
+                        <div id="barchart-box-V">
+                            <div id="barchart_values-v"></div>
+                        </div>
+
+                        <div id="unusedV-class-found">
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">Unused Method Data</h2>
+                            <div class="unusedM-info">
+                                <h1 id="unusedV-found">45</h1>
+                                <h2>AMOUNT OF UNUSED METHODS FOUND</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
+                    <div id="unused-var-table">
+                        We first of all go through each file and
+                        then from there we go through each of the classes.
+                        We gather the field variables from the class.
+                        We then loop through all the methods in the class
+                        to see if those field variables are ever used.
+                    </div>
+                </div>
+
+                <div class="content">
+
+                    <div class="title-box">
+                        <h2 id="unusedM-heading"></h2>
+                    </div>
+                    <div id="unusedM-display">
+                        <div id="barchart-box">
+                            <div id="barchart_values"></div>
+                        </div>
+
+                        <div id="unusedM-class-found">
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">Unused Method Data</h2>
+                            <div class="unusedM-info">
+                                <h1 id="unusedM-found">45</h1>
+                                <h2>AMOUNT OF UNUSED METHODS FOUND</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
+                    <div id="unused-method-table">
+                        To see if a method is used we look through each line of code
+                        and check one or more methods are called in this line.
+                        Every method that is called in a line has its usage
+                        count incremented in a hashmap of method to usage.
+                        Those methods who’s usage count is 0 are unused.
+                    </div>
+                </div>
+
+                <div class="content" >
+
+                    <div class="title-box">
+                        <h2 id="PO-heading"></h2>
+                    </div>
+                    <div id="PO-display">
+                        <div id="barchart-box-PO">
+                            <div id="barchart_values-PO"></div>
+                        </div>
+
+                        <div id="PO-class-found">
+                            <h2 style="padding: 5px 10px;color: #9c9c9c;text-align: center;">Primitive Obsessed Data</h2>
+                            <div class="unusedM-info">
+                                <h2>PRIMITIVE OBSESSED CLASSES FOUND:</h2>
+                                <h1 id="PO-found">45</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
+                    <div id="PO-table">
+                        Primitive Obsession is a result of there being too many constants declared.
+                        Our program takes in the files and goes through each class checking if it
+                        suffers from primitive obsession. It finds the number of
+                        primitives out of the total number of field variables in that class.
+                        If there are more than 5 primitive variables and that the overall
+                        percentage of field variables being primitive was 50% or higher,
+                        the class suffers from primitive obsession.
                     </div>
                 </div>
                 

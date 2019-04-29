@@ -123,13 +123,12 @@ a{
     position: relative;
     text-transform: uppercase;
     display: inline-grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     margin: 20px 0;
 }
 
 .title-box{
     position: relative;
-    width:100%;
     border-radius: 5px 5px 0 0 ;
     background-color: #0868a6;
 }
@@ -142,11 +141,11 @@ a{
 }
 
 .content{
-    width: 95%;
+    width: 60%;
     background-color: #f6f6f6;
     border-radius: 5px;
     display: grid;
-    margin: 0 auto;
+    margin: 20px auto;
     font-family: 'Rajdhani', sans-serif;
 }
 #overview-display{
@@ -154,20 +153,32 @@ a{
     height:70%;
     grid-template-columns: 40% 60%;
 }
-#godclass-display{
+#godclass-display, #unusedM-display, #unusedV-display, #PO-display{
     display: inline-grid;
     height:70%;
     grid-template-columns: 60% 40%;
 }
-#general-smells-found,#god-class-found{
+#unused-method-table{
+    width:90%;
+    padding:10px;
+    background-color: #1a4886;
+}
+#general-smells-found,#god-class-found, #PO-class-found{
     width:90%;
     margin: 0 auto;
 }
 .general-smell-title{
     font-size: 15px;
-    color:red;
+    color:black;
 }
 .overview-smell{
+    margin: 5px auto;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.god-info{
     margin: 5px auto;
     background-color: white;
     padding: 5px;
@@ -210,11 +221,13 @@ a{
 #overview-table, #god-class-table{
     max-height: 200px;
     display: flex;
+    overflow-y: scroll;
     flex-flow: wrap;
     flex-wrap: wrap;
     grid-gap: 5px;
     flex-flow: wrap;
     background-color: #0868a6;
+    color: white;
 }
 
 .overview-table-data{
@@ -223,10 +236,11 @@ a{
     color: black;
     text-align: center;
     font-size: 15px;
-    background-color: white;
     padding: 5px 10px;
     border-radius: 3px;
     float: left;
+    background-color: #fff;
+
 }
 .files-found{
     padding: 10px;
@@ -247,6 +261,17 @@ a{
     display: grid;
     grid-gap: 5px;
     grid-template-rows: repeat(5,1fr);
+}
+
+#barchart-box,#barchart-box-v, #barchart_values, #barchart_values-v, #barchart-box-PO, #barchart_values-PO{
+    width:100%;
+    height:100%;
+    min-height: 450px;
+}
+.unusedM-info{
+    width:90%;
+    border:5px solid #4286f4;
+    padding:10px;
 }
 
 .box-info{

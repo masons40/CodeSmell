@@ -7,9 +7,10 @@ import java.util.HashMap;
 
 public class UnusedMethods {
     private transient ArrayList<SLFile> files = new ArrayList<>();
-    private HashMap<SLMethod, Integer> methodUsage = new HashMap<>();
-    private HashMap<SLMethod, SLClass> unusedMethodsClasses = new HashMap<>();
-    private ArrayList<SLMethod> unusedMethods = new ArrayList<>();
+    private transient HashMap<SLMethod, Integer> methodUsage = new HashMap<>();
+    private HashMap<String, String> unusedMethodsClasses = new HashMap<>();
+    private transient ArrayList<SLMethod> unusedMethods = new ArrayList<>();
+    private HashMap<String, Integer> unusedMethodsPerClass = new HashMap<>();
     private int numberOfUnusedMethods = 0;
 
     public UnusedMethods(ArrayList<SLFile> files){
@@ -46,15 +47,28 @@ public class UnusedMethods {
             }
         }
 
-        for (SLMethod method : unusedMethods) {
-            for (SLFile file :files) {
-                for (SLClass clazz : file.getClasses()) {
-                    if(clazz.getMethods().contains(method)){
-                        unusedMethodsClasses.put(method,clazz);
+        for (SLFile file :files) {
+            for (SLClass clazz : file.getClasses()) {
+                for (SLMethod method : unusedMethods) {
+                    for (SLMethod classMethod:clazz.getMethods()) {
+                        if(classMethod.getName().equals(method.getName())){
+                            unusedMethodsClasses.put(method.getName(),clazz.getClassName());
+                        }
                     }
                 }
             }
         }
+
+        for (SLMethod method:unusedMethods) {
+            String clazz = unusedMethodsClasses.get(method.getName());
+            if(unusedMethodsPerClass.containsKey(clazz)) {
+                unusedMethodsPerClass.put(clazz, unusedMethodsPerClass.get(clazz)+1);
+            }
+            else {
+                unusedMethodsPerClass.put(clazz,1);
+            }
+        }
+
 
         numberOfUnusedMethods = unusedMethods.size();
 

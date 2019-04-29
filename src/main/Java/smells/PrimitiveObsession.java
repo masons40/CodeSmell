@@ -49,7 +49,9 @@ public class PrimitiveObsession {
                 if (isPrimitiveObsession(numberOfPrimitives, c.getVariables().size())) {
                     primitiveObsessedClasses.add(c.getClassName());
                 }
-                primitiveObsessionVarNumber.put(c.getClassName(), numberOfPrimitives);
+                if (numberOfPrimitives > 0) {
+                    primitiveObsessionVarNumber.put(c.getClassName(), numberOfPrimitives);
+                }
             }
         }
     }

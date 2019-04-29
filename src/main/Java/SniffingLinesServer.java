@@ -5,10 +5,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.google.gson.*;
 import files.*;
 import management.FileTransfer;
-import smells.GeneralOverview;
-import smells.GodClasses;
-import smells.PrimitiveObsession;
-import smells.UnusedVariables;
+import smells.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -102,10 +99,14 @@ public class SniffingLinesServer extends HttpServlet {
         GeneralOverview go = new GeneralOverview(files, companyName, javaFileNames);
         GodClasses gc = new GodClasses(files);
         PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
+        UnusedMethods um = new UnusedMethods(files);
+        UnusedVariables uv = new UnusedVariables(files);
         HashMap<String, Object> objects = new HashMap<>();
         objects.put("GeneralOverview", go);
         objects.put("GodClass", gc);
         objects.put("PrimitiveObsession", primitiveObsession);
+        objects.put("UnusedMethods", um);
+        objects.put("UnusedVariables", uv);
 
         Gson gson = new Gson();
 
