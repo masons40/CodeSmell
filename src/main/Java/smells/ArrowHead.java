@@ -1,6 +1,9 @@
 //package  smells;
 //
 //import files.SLClass;
+//import files.SLFile;
+//import files.SLMethod;
+//
 //import java.io.BufferedReader;
 //import java.io.File;
 //import java.io.FileReader;
@@ -10,21 +13,21 @@
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 //
-//public class ArrowHead extends SmellDetector{
+//public class ArrowHead {
 //
 //	String conditionalBlockType = String.format("(if|else|elseif|switch|do|for|try|do)");
 //
 //	public ArrowHead() {}
 //
-//	public ArrayList<ArrowHeadSmell> evaluate(File file, SLClass originalClass) throws Exception{
-//		lineCount = 0;
+//	public HashMap<String, Integer> getArrowHeads(ArrayList<SLFile> files) throws Exception{
 //		int startLineCount = 0;
-//		BufferedReader br = new BufferedReader(new FileReader(file));
-//		ArrayList<ArrowHeadSmell> ArrowHeadSmells = new ArrayList<>(); //Condition -> Max Conditional Depth
-//		String line="";
+//		HashMap<String, Integer> ArrowHeadSmells = new HashMap<>(); //Condition -> Max Conditional Depth
 //
-//		while ((line = br.readLine()) != null) {
-//			line = line.replaceAll("\\s+", "");
+//		for(SLFile f : files) {
+//			for (SLClass clazz : f.getClasses()) {
+//				for (SLMethod m : clazz.getMethods()) {
+//					for (String line : m.getMethodBody()) {
+//						line = line.replaceAll("\\s+", "");
 //
 //			if (isConditionalBlock(line)){ //Enter main condition block
 //				startLineCount = lineCount;
