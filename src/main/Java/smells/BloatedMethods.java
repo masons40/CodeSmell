@@ -30,7 +30,6 @@ public class BloatedMethods {
         }
 
         numberOfBloatedMethods = bloatedMethods.size();
-
         if (bloatedMethods.size()>0) {
             smellPresent = true;
         }

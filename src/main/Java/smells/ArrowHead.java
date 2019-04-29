@@ -1,12 +1,12 @@
+/*
+	Detect nested condition blocks across multiple files
+ */
+
 package  smells;
 
 import files.SLClass;
 import files.SLFile;
 import files.SLMethod;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -57,7 +57,6 @@ public class ArrowHead {
 		String line = methodBody.get(currLine);
 		Stack<Integer> currConditions = new Stack<>();
 		boolean expectOpenBracket = false;
-		//String condition = findCondition(line);
 		if(endsWithOpenBracket(line))   //lasting
 			currConditions.push(1);
 		else {                         //temp
