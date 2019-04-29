@@ -20,6 +20,45 @@ $("document").ready(function() {
     document.getElementById('god-found').innerText = obj.GodClass.numberOfGodClasses;
     console.log(obj);
 
+    if(obj.GodClass.smellPresent){
+        document.getElementById('God-Class-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">God Class</h2>' +
+            '<i class=\"fas fa-check inline-b\" style=\"color:green;\"></i>';
+    }else{
+        document.getElementById('God-Class-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">God Class</h2>' +
+            '<i class="far fa-times-circle" style=\"color:red;\"></i>';
+    }
+
+    if(obj.PrimitiveObsession.smellPresent){
+        document.getElementById('PO-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Primitive Obsession</h2>' +
+            '<i class=\"fas fa-check inline-b\" style=\"color:green;\"></i>';
+    }else{
+        document.getElementById('PO-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Primitive Obsession</h2>' +
+            '<i class="far fa-times-circle" style=\"color:red;\"></i>';
+    }
+
+    if(obj.UnusedMethods.smellPresent){
+        document.getElementById('UN-Methods').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Unused Methods</h2>' +
+            '<i class=\"fas fa-check inline-b\" style=\"color:green;\"></i>';
+    }else{
+        document.getElementById('UN-Methods').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Unused Methods</h2>' +
+            '<i class="far fa-times-circle" style=\"color:red;\"></i>';
+    }
+
+    if(obj.UnusedVariables.smellPresent){
+        document.getElementById('UV-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Unused Variables</h2>' +
+            '<i class=\"fas fa-check inline-b\" style=\"color:green;\"></i>';
+    }else{
+        document.getElementById('UV-Bool').innerHTML =
+            '<h2 class=\"inline-b general-smell-title\">Unused Variables</h2>' +
+            '<i class="far fa-times-circle" style=\"color:red;\"></i>';
+    }
 
     var table = document.getElementById('overview-table');
     for(var i=0;i<obj.GeneralOverview.filenames.length;i++) {

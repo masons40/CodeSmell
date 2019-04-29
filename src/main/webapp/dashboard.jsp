@@ -96,47 +96,18 @@
 
                         <div id="general-smells-found">
                             <h2 style="padding: 5px 10px;color: #9c9c9c;">Smells Detected</h2>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
-                            <div class="overview-smell">
-                                <span class="overview-circle-colour inline-b"></span>
-                                <h2 class="inline-b general-smell-title">God Class</h2>
-                                <i class="fas fa-check inline-b" style="color:green;"></i>
-                            </div>
+                            <div class="overview-smell" id="God-Class-Bool">
 
+                            </div>
+                            <div class="overview-smell" id="UV-Bool">
+
+                            </div>
+                            <div class="overview-smell" id="UN-Methods">
+
+                            </div>
+                            <div class="overview-smell" id="PO-Bool">
+
+                            </div>
                         </div>
                     </div>
 
@@ -194,7 +165,7 @@
                     <h2 style="padding: 0 0 0 10px;color: #9c9c9c;">How We do it</h2>
                     <div id="god-class-table">
                         These are large classes that simply do or know too much.
-                        Our program calculates a “god score”  for each file, which is
+                        Our program calculates a "god score"  for each file, which is
                         essential the weighted sum of of the number of lines
                         and the number of methods (weights are 0.1 & 0. 7 respectively).
                     </div>
