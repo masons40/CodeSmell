@@ -6,6 +6,13 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import java.util.ArrayList;
 
+/**
+ * This class is used to extract all of the data from the java parser we use to extract all of the info
+ * This class will be used to create an object of a file that is parsed through our system. This file is was made by us
+ * so we know all of the correct methods to use to get teh relevant info for smells. A lot of the methods use lambdas so please use
+ * java version 9 and above
+ */
+
 public class DataCollection {
 
     private ArrayList<SLVariable> variables = new ArrayList<>();
@@ -15,7 +22,6 @@ public class DataCollection {
     private ArrayList<SLEnum> enums = new ArrayList<>();
 
     private int classPrev = -1;
-    private int enumCounter = -1;
 
     public void variableDetection(CompilationUnit cu){
         cu.findAll(FieldDeclaration.class).stream().filter(FieldDeclaration::isFieldDeclaration).forEach(f -> {
@@ -48,7 +54,6 @@ public class DataCollection {
             */
             Boolean isNested = en.isNestedType();
             enums.add(new SLEnum(name,enumMod,enumConstants,isNested));
-            enumCounter++;
         });
     }
 

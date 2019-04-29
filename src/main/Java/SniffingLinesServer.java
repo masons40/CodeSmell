@@ -23,14 +23,13 @@ import java.util.List;
 public class SniffingLinesServer extends HttpServlet {
     private FileTransfer fileTransfer;
     private ArrayList<String> javaFileNames;
-    private String javaFilePath="",companyFilePath="";
+    private String javaFilePath="";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         fileTransfer = new FileTransfer(request, response);
         javaFileNames = fileTransfer.getfileNames();
         javaFilePath = fileTransfer.getJavaFilePath();
-        //companyFilePath = fileTransfer.getCompanyFilePath();
         DataCollection dc = new DataCollection();
         String companyName = fileTransfer.getCompanyName();
 
@@ -67,35 +66,7 @@ public class SniffingLinesServer extends HttpServlet {
             files.add(new SLFile(s, classes, methods, variables, interfaces, enums, dc.commentCount(cu)));
             dc.clearAll();
         }
-        for(SLFile file: files){
-//            for(SLClass e: file.getClasses()){
-//                response.getWriter().println("Class Methods");
-//                for(SLMethod m: e.getMethods()){
-//                    response.getWriter().println(m.toString());
-//                    response.getWriter().println("Does the method contains variables(size):" + m.getVariables().size());
-//                    response.getWriter().println(m.methBody());
-//                }
-//            }
-//            response.getWriter().println("Methods");
-//            for(SLMethod e: file.getMethods()){
-//                response.getWriter().println(e.toString());
-//                response.getWriter().println(e.methBody());
-//                response.getWriter().println(e.methVariables());
-//            }
-//            response.getWriter().println("Variables");
-//            for(SLVariable e: file.getVariables()){
-//                response.getWriter().println(e.toString());
-//            }
-//            response.getWriter().println("Enums");
-//            for(SLEnum e: file.getEnums()){
-//                response.getWriter().println(e.toString());
-//            }
-//            response.getWriter().println("Interfaces");
-//            for(SLInterface e: file.getInterfaces()){
-//                response.getWriter().println(e.toString());
-//            }
-//            response.getWriter().println("Number of comments:" + file.getCommentCount());
-        }
+
         GeneralOverview go = new GeneralOverview(files, companyName, javaFileNames);
         GodClasses gc = new GodClasses(files);
         PrimitiveObsession primitiveObsession = new PrimitiveObsession(files);
@@ -103,6 +74,10 @@ public class SniffingLinesServer extends HttpServlet {
         UnusedVariables uv = new UnusedVariables(files);
         BloatedMethods bm = new BloatedMethods(files);
         ArrowHead ah = new ArrowHead(files);
+
+        /*
+        creating a hashmap of objects allows us to easily create the json we use to display all of the data on teh dashboard
+         */
         HashMap<String, Object> objects = new HashMap<>();
         objects.put("GeneralOverview", go);
         objects.put("GodClass", gc);
@@ -119,21 +94,6 @@ public class SniffingLinesServer extends HttpServlet {
         request.setAttribute("jsonData",gson.toJson(objects));
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
-//        for (SLFile f: files) {
-//            response.getWriter().println(f.getName());
-//            for (SLMethod m: f.getMethods()) {
-//                response.getWriter().println(m.getName());
-//                response.getWriter().println(m.findMethodVariables());
-//            }
-//        }
-
-//        UnusedVariables unusedVariables = new UnusedVariables();
-//        response.getWriter().println(unusedVariables.findUnusedFieldVariables(files));
-
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        request.setAttribute("jsonData",gson.toJson(primitiveObsession));
-//        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

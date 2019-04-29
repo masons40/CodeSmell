@@ -65,8 +65,7 @@ $("document").ready(function() {
         table.innerHTML += '<div class="overview-table-data">'+obj.GeneralOverview.filenames[i]+'</div>';
     }
 
-    document.getElementById('future').innerText = "The Bloated methods section:" +
-        obj.BloatedMethods.stringify() + "\nArrow Head" + obj.ArrowHead.stringify();
+    document.getElementById('future').innerText = "The Bloated methods section " + JSON.stringify(obj.BloatedMethods,  undefined);
 
     // var randomScalingFactor = function() {
     //     return Math.round(Math.random() * 100);
