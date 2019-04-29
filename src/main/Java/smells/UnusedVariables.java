@@ -5,6 +5,9 @@ import files.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class checks if there are variables in the project that are declared but never used
+ */
 public class UnusedVariables {
     private transient ArrayList<SLFile> files = new ArrayList<>();
     private HashMap<String, String> unusedVariableClasses = new HashMap<>();
@@ -17,6 +20,13 @@ public class UnusedVariables {
         this.files = files;
         findUnusedFieldVariables();
     }
+
+    /**
+     * This method searches through the ArrayList of files.
+     * From there it will go through every class, get its variables and
+     * then go through the methods to see if those variables are ever true
+     * @return It returns an ArrayList of these variables
+     */
 
     public ArrayList<SLVariable> findUnusedFieldVariables() {
         ArrayList<SLVariable> remove = new ArrayList<>();
@@ -68,6 +78,13 @@ public class UnusedVariables {
         return unusedVariables;
     }
 
+    /**
+     * Checks if a variable was used on a certain line of code
+     * @param line a line of code
+     * @param variableName the name of the variable we are checking
+     * @return true or false whether the variable is used
+     */
+
     public boolean isUsed(String line, String variableName) {
         String[] lineSplitUp = line.split("\\s+");
         String lineNoSpaces = line.replaceAll("\\s+", "");
@@ -81,6 +98,12 @@ public class UnusedVariables {
 
         return false;
     }
+
+    /**
+     * Method to find a variable's name
+     * @param lineSplit the line split up as an array on every space
+     * @return a string of the name of the variable
+     */
 
     private String findVariableName(String[] lineSplit) {
         String name = "";

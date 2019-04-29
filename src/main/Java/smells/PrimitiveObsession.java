@@ -7,6 +7,10 @@ import files.SLVariable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A class that checks whether or not primitive obsession is present in a class
+ */
+
 public class PrimitiveObsession {
 
     private transient String primitivesRegex = "(byte|short|int|long|float|double|boolean|char)";
@@ -18,6 +22,12 @@ public class PrimitiveObsession {
         findPrimitiveClasses(files);
     }
 
+    /**
+     * Goes through a list of variables and returns a list of those that are primitive
+     * @param variables array of variable objects
+     * @return the ArrayList of primitive variables
+     */
+
     private ArrayList<SLVariable> findPrimitiveVariables(ArrayList<SLVariable> variables) {
         ArrayList<SLVariable> primitiveVariables = new ArrayList<>();
         for (SLVariable var: variables) {
@@ -28,6 +38,13 @@ public class PrimitiveObsession {
 
         return primitiveVariables;
     }
+
+    /**
+     * A metric to see if a class suffers from primitive obsession
+     * @param numberOfPrimitiveVars number of primitives
+     * @param numberOfVariables number of variables
+     * @return a boolean as to whether the class is primitively obsessed
+     */
 
     private boolean isPrimitiveObsession(int numberOfPrimitiveVars, int numberOfVariables) {
         double numPrimitives = numberOfPrimitiveVars;
@@ -42,6 +59,11 @@ public class PrimitiveObsession {
         }
 
     }
+
+    /**
+     * Goes through amd finds the classes that are primitively obsessed
+     * @param files array of files
+     */
 
     private void findPrimitiveClasses(ArrayList<SLFile> files) {
 

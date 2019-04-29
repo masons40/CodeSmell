@@ -2,11 +2,21 @@ package files;
 
 import java.util.ArrayList;
 
+/**
+ * Class that can detect variables
+ */
+
 public class VariableDetector {
 
     private String dataTypeRegex = "(byte|short|int|long|float|double|boolean|char|String)";
     private String accessorsRegex = "(public|private|protected|static|final|native|synchronized|abstract|transient)";
     private ArrayList<SLVariable> variableList = new ArrayList<>();
+
+    /**
+     * checks the lines of the files to see if there are variable declarations
+     * @param line line of code
+     * @return an array of variables
+     */
 
     public ArrayList<SLVariable> checkForVariables(String line) {
         String[] lineSplit =line.split("\\s+");
@@ -22,6 +32,12 @@ public class VariableDetector {
 
         return variableList;
     }
+
+    /**
+     * checks a line of code to see if there has been a variable dec;aration on that line
+     * @param line line of code
+     * @return whether that line has a variable declaration or not
+     */
 
     public boolean isVariable(String line) {
         line = line.replaceAll("\\s+", "");
@@ -47,6 +63,12 @@ public class VariableDetector {
         }
     }
 
+    /**
+     * Used to find a variable's scope
+     * @param lineSplit array split on spaces
+     * @return string of the scope specified if any
+     */
+
     private String findScope(String[] lineSplit) {
         String scope = "";
 
@@ -58,6 +80,13 @@ public class VariableDetector {
 
         return scope;
     }
+
+    /**
+     * Used to find a variable's type
+     * @param lineSplit array split on spaces
+     * @param variableName name of the variable
+     * @return string with the variable's type
+     */
 
     private String findType(String[] lineSplit, String variableName) {
         String type = "";
@@ -74,6 +103,12 @@ public class VariableDetector {
 
         return type;
     }
+
+    /**
+     * method to find a variable's declared name
+     * @param lineSplit array split on spaces
+     * @return string with the variable's name
+     */
 
     private String findName(String[] lineSplit) {
         String name = "";
@@ -104,6 +139,10 @@ public class VariableDetector {
         return name;
     }
 
+    /**
+     * get the list of variables
+     * @return an ArrayList of variables
+     */
 
     public ArrayList<SLVariable> getVariableList(){
         return variableList;
