@@ -38,7 +38,7 @@ public class GodClasses {
         for (SLFile slFile: files) {
             ArrayList<SLClass> classes = slFile.getClasses();
             for (SLClass clazz : classes) {
-                int numLines = getNumOfFileLines(clazz);
+                int numLines = getNumOfClassLines(clazz);
                 int numMethods = clazz.getMethods().size();                  //change in future
                 averageGodScore += calculateGodScore(numLines, numMethods);
                 numberOfClasses++;
@@ -50,7 +50,7 @@ public class GodClasses {
         for (SLFile slFile:files) {
             ArrayList<SLClass> classes = slFile.getClasses();
             for (SLClass clazz : classes) {
-                int numLines = getNumOfFileLines(clazz);
+                int numLines = getNumOfClassLines(clazz);
                 int numMethods = clazz.getMethods().size();                   //change in future
                 double godScore = calculateGodScore(numLines, numMethods);
                 godScores.put(clazz.getClassName(),godScore);
@@ -69,12 +69,13 @@ public class GodClasses {
         return godClasses;
     }
 
-
+    //god score metric calculated as weighted sum of lines and methods
     private double calculateGodScore(int numOfLines, int numOfMethods){
         return (numOfLines*0.1)+(numOfMethods*0.7);
     }
 
-    private static int getNumOfFileLines(SLClass clazz){
+    //find the number of lines of code in a class
+    private static int getNumOfClassLines(SLClass clazz){
         int numOfLines = 0;
 
         for (SLMethod method : clazz.getMethods()) {

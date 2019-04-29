@@ -5,6 +5,11 @@ import files.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/*
+Unused methods returns information about all unused methods such as what class they are in,
+how many exist and how many exist per file
+ */
 public class UnusedMethods {
     private transient ArrayList<SLFile> files = new ArrayList<>();
     private transient HashMap<SLMethod, Integer> methodUsage = new HashMap<>();
@@ -48,6 +53,7 @@ public class UnusedMethods {
             }
         }
 
+        //hashmap of method to the class the method is in is initialized here
         for (SLFile file :files) {
             for (SLClass clazz : file.getClasses()) {
                 for (SLMethod method : unusedMethods) {
@@ -60,6 +66,7 @@ public class UnusedMethods {
             }
         }
 
+        //a hash map of class to the number of unused methods per class is initialized here
         for (SLMethod method:unusedMethods) {
             String clazz = unusedMethodsClasses.get(method.getName());
             if(unusedMethodsPerClass.containsKey(clazz)) {
