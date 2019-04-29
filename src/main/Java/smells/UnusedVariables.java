@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class UnusedVariables {
     private transient ArrayList<SLFile> files = new ArrayList<>();
-    private HashMap<SLVariable, SLClass> unusedVariableClasses = new HashMap<>();
-    private ArrayList<SLVariable> unusedVariables = new ArrayList<>();
+    private HashMap<String, String> unusedVariableClasses = new HashMap<>();
+    private transient ArrayList<SLVariable> unusedVariables = new ArrayList<>();
     private int numberOfUnusedVariables = 0;
 
     public UnusedVariables(ArrayList<SLFile> files){
@@ -39,8 +39,10 @@ public class UnusedVariables {
         for (SLVariable variable : unusedVariables) {
             for (SLFile file :files) {
                 for (SLClass clazz : file.getClasses()) {
-                    if(clazz.getMethods().contains(variable)){
-                        unusedVariableClasses.put(variable,clazz);
+                    for (SLVariable classVariable:clazz.getVariables()) {
+                        if (classVariable.getName().equals(variable.getName())) {
+                            unusedVariableClasses.put(variable.getName(), clazz.getClassName());
+                        }
                     }
                 }
             }
