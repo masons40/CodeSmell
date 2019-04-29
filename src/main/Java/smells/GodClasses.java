@@ -53,7 +53,7 @@ public class GodClasses {
                 int numMethods = clazz.getMethods().size();                   //change in future
                 double godScore = calculateGodScore(numLines, numMethods);
                 godScores.put(clazz.getClassName(),godScore);
-                if ((godScore >= (3.5 * averageGodScore)) || (numLines > 700)) {
+                if ((godScore >= (3.5 * averageGodScore)) || (numLines > 1500)) {
                     godClasses.add(clazz.getClassName());
                 }
             }
